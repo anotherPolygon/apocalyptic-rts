@@ -46,6 +46,10 @@ public class CameraController : MonoBehaviour
 
     private float mouseX, mouseY;
 
+    // Will hold original rotation of the camera
+
+    private Quaternion originalRotation;
+
 
     void Start()
 
@@ -55,6 +59,9 @@ public class CameraController : MonoBehaviour
 
         cam = Camera.main;
 
+        // Saving a reference to the original rotation of the camera
+
+        originalRotation = transform.rotation;
     }
 
 
@@ -159,10 +166,18 @@ public class CameraController : MonoBehaviour
 
     {
 
+        if (Input.GetKey("space"))
+        {
+            // Reseting Orientation to the original transformarion
+            transform.rotation = originalRotation;
+
+            // Reseting Mouse movement values from former rotarions
+            mouseX = 0f;
+            mouseY = 0f;
+        }
         // If Mouse Button 1 is pressed, (the secondary (usually right) mouse button)
 
         if (Input.GetMouseButton(1))
-
         {
 
             // Our mouseX variable gets set to the X position of the mouse multiplied by the rotation speed added to it.
@@ -180,6 +195,7 @@ public class CameraController : MonoBehaviour
             // Set the rotation of the camera target along the X axis (pitch) to mouseY (up & down) & Y axis (yaw) to mouseX (left & right), the Z axis (roll) is always set to 0 as we do not want the camera to roll.
 
             transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+
 
         }
 
