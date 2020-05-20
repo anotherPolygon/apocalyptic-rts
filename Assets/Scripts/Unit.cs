@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : Entity
 {
     private Game Game;
 
@@ -16,7 +16,6 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("d");
-        Game.DebugConsole.Log(Input.GetAxis("Horizontal"),"Horizontal value: ");
+        //Game.DebugConsole.Log(Input.GetAxis("Horizontal"),"Horizontal value: ");
     }
 }
