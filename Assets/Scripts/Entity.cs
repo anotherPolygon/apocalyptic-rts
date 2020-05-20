@@ -63,17 +63,18 @@ public class Entity : MonoBehaviour
      private void onApplyMainObjectMethod(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
      {
         if (isSelected)
-        {
-            if(agent != null)
+        { 
+            int i = 0;
+            foreach(Entity entity in selectedEntetiesList)
             {
-                int i = 0;
-                foreach(Entity entity in selectedEntetiesList)
+                if(entity.agent != null)
                 {
-                    i += 2;
                     entity.agent.destination = point + new Vector3(0, 0, i);
+                    i += 2;
                 }
-                //agent.destination = point;
+                    
             }
+                //agent.destination = point;
         }
 
             
