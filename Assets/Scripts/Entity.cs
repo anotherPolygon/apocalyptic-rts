@@ -2,15 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Entity : MonoBehaviour
 {
     public GameObject player;
     private MouseInputManager mouseInput;
+    private NavMeshAgent agent;
+    
 
     public bool isSelected = false;
     public int health = 100;
     public int maxHealth = 100;
+    public Transform HBtrasform;
 
     // The following enum "InteractionOptions" holds all the action an entity may RECIEVE from antoher entity
     //      these option will be associated with a method that exists at the recieving entity (this method will
@@ -37,18 +41,47 @@ public class Entity : MonoBehaviour
         work,
         Guard,
     }
-    
+
 
     // Start is called before the first frame update
     private void Start()
     {
 
-        player = GameObject.Find("Player");
-        mouseInput  = player.GetComponent<MouseInputManager>();
+        agent = GetComponent<NavMeshAgent>();
 
+        player = GameObject.Find("Player");
+        mouseInput = player.GetComponent<MouseInputManager>();
+
+        HBtrasform = transform.Find("HB");
+
+        GameEvents.current.onApplyMainObjectMethodTrigger += onApplyMainObjectMethod;
         GameEvents.current.onEntitySelectionTigger += onEntitySeletcion;
         GameEvents.current.onUnitMultiSelectTrigger += onUnitMultiSelect;
 
+    }
+    
+     private void onApplyMainObjectMethod(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
+     {
+        if (isSelected)
+        {
+            if(agent != null)
+            {
+                int i = 0;
+                foreach(Entity entity in selectedEntetiesList)
+                {
+                    i += 2;
+                    entity.agent.destination = point + new Vector3(0, 0, i);
+                }
+                //agent.destination = point;
+            }
+        }
+
+            
+        //if (selectedObject == gameObject)
+        //{
+        //    Debug.Log("" + gameObject + " doing " + point);
+        //    agent.destination = point;
+        //}
     }
 
     private void onEntitySeletcion(GameObject selectedObject)
@@ -56,12 +89,14 @@ public class Entity : MonoBehaviour
         if (selectedObject == gameObject)
         {
             isSelected = true;
+            ShowThatEntityIsSelected(isSelected);
             onSelectedTrigger(gameObject);
 
         }
         else
         {
             isSelected = false;
+            ShowThatEntityIsSelected(isSelected);
         }
 
     }
@@ -74,6 +109,7 @@ public class Entity : MonoBehaviour
         {
             isSelected = true;
             onSelectedTrigger(gameObject);
+            ShowThatEntityIsSelected(isSelected);
         }
 
     }
@@ -92,12 +128,13 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ShowThatEntityIsSelected();
+
     }
 
     // A method the indeactes the an entity is currently selected
-    public void ShowThatEntityIsSelected()
+    public void ShowThatEntityIsSelected(bool selectionBool)
     {
-       // throw new NotImplementedException();
+        if(HBtrasform != null)
+            HBtrasform.gameObject.SetActive(selectionBool);
     }
 }

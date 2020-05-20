@@ -177,7 +177,7 @@ public class CameraController : MonoBehaviour
         }
         // If Mouse Button 1 is pressed, (the secondary (usually right) mouse button)
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(2))
         {
 
             // Our mouseX variable gets set to the X position of the mouse multiplied by the rotation speed added to it.

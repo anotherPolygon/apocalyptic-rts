@@ -45,6 +45,14 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action<List<Entity>, GameObject, Vector3> onApplyMainObjectMethodTrigger;
+    public void applyMainObjectMethod(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
+    {
+        if (onApplyMainObjectMethodTrigger  != null)
+        {
+            onApplyMainObjectMethodTrigger(selectedEntetiesList, targetObject, point);
+        }
+    }
 
 
 }
