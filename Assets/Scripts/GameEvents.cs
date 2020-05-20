@@ -27,4 +27,24 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action<Bounds> onUnitMultiSelectTrigger;
+    public void unitMultiSelectTrigger(Bounds selectionBoxBounds)
+    {
+        if (onUnitMultiSelectTrigger != null)
+        {
+            onUnitMultiSelectTrigger(selectionBoxBounds);
+        }
+    }
+
+    public event Action<GameObject> onSelectedTrigger;
+    public void selectedTrigger(GameObject gameObjectInstance)
+    {
+        if (onSelectedTrigger != null)
+        {
+            onSelectedTrigger(gameObjectInstance);
+        }
+    }
+
+
+
 }

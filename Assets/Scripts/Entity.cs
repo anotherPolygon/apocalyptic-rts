@@ -7,8 +7,6 @@ public class Entity : MonoBehaviour
 {
     public GameObject player;
     private MouseInputManager mouseInput;
-    public GameObject selelctdObject;
-
 
     public bool isSelected = false;
     public int health = 100;
@@ -49,6 +47,7 @@ public class Entity : MonoBehaviour
         mouseInput  = player.GetComponent<MouseInputManager>();
 
         GameEvents.current.onEntitySelectionTigger += onEntitySeletcion;
+        GameEvents.current.onUnitMultiSelectTrigger += onUnitMultiSelect;
 
     }
 
@@ -57,6 +56,7 @@ public class Entity : MonoBehaviour
         if (selectedObject == gameObject)
         {
             isSelected = true;
+            onSelectedTrigger(gameObject);
 
         }
         else
@@ -66,10 +66,27 @@ public class Entity : MonoBehaviour
 
     }
 
-    private void OnDestroy()
+    private void onUnitMultiSelect(Bounds selectionBoxBounds)
+    {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        screenPos.z = 0;
+        if (selectionBoxBounds.Contains(screenPos))
+        {
+            isSelected = true;
+            onSelectedTrigger(gameObject);
+        }
+
+    }
+
+    private void onSelectedTrigger(GameObject gameObjectInstance)
+    {
+        GameEvents.current.selectedTrigger(gameObjectInstance);
+    }
+
+        private void OnDestroy()
     {
         GameEvents.current.onEntitySelectionTigger -= onEntitySeletcion;
-
+        GameEvents.current.onUnitMultiSelectTrigger -= onUnitMultiSelect;
     }
 
     // Update is called once per frame
