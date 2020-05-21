@@ -25,6 +25,7 @@ public class MouseInputManager : MonoBehaviour
     void Start()
     {
         GameEvents.current.onSelectedTrigger += onSelected;
+        recievedSelectedObject = null;
 
         if (selectionBox != null)
         {
@@ -133,6 +134,8 @@ public class MouseInputManager : MonoBehaviour
             {
                 rayCastHitObject = hit.collider.gameObject;
                 onEntitySelectionTrigger(rayCastHitObject);
+                if(recievedSelectedObject != null)
+                    selectedEntities.Add(recievedSelectedObject.GetComponent<Entity>());
                 Debug.Log(rayCastHitObject);
             }
             else
@@ -164,7 +167,7 @@ public class MouseInputManager : MonoBehaviour
     private void onSelected(GameObject SelectedObject)
     {
         recievedSelectedObject = SelectedObject;
-        
+
     }
 
 }

@@ -112,6 +112,11 @@ public class Entity : MonoBehaviour
             onSelectedTrigger(gameObject);
             ShowThatEntityIsSelected(isSelected);
         }
+        // Tryin to deselects when box leaves
+        //else if (isSelected)
+        //    isSelected = false;
+        //    ShowThatEntityIsSelected(isSelected);
+
 
     }
 
