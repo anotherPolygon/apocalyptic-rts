@@ -1,0 +1,86 @@
+
+
+
+////     Game    ////
+
+Dictionary<int, Entity> IdToObject = new Dictionary<int, Entity>();
+Dictionary<Entity, int> ObjectToId = new Dictionary<Entity, int>();
+int current_newest_id;
+
+public void AssignNewObject(Entity entity)
+    IdToObject.Add(current_newest_id+1, entity)
+    ObjectToId.Add(entity, current_newest_id+1)
+
+public bool is_player_building(other_id)
+    return IdToObject[other_id].is_building
+
+////     Entity    ////
+
+public bool is_unit;
+public bool is_building;
+public bool is_cattle;
+public bool is_settler;
+
+
+private void Start()
+{
+    this.id = game.assign_id
+}
+
+
+
+////     Settler    ////
+
+private int assigned_building_id;
+
+private void onAction(int other_id)
+{   
+    if game.objects.is_player_building(other_id):
+        // ask to be assigned to building
+        onAssignAskTrigger(this.id, other_id)
+    
+    if game.objects.is_enemy_building(other_id):
+        // attack
+}
+
+private void onAssignConfirmed(int other_id)
+{
+    // code
+    
+    // trigger event AssignmentEndTrigger(assigned_building_id)
+    
+    // more code
+}
+
+
+////     Building    ////
+
+public bool is_building = true;
+private bool is_player;
+
+private void onAssignAsk(int other_id, int building_id)
+{
+    if building_id != this.id:
+        return;
+        
+    if !is_settler_already_assigned(other_id) & !is_full():
+        AssignSettler(other_id)
+    else:
+        announce_building_is_fully_assigned()
+}
+    
+
+////     Shed    ////
+
+
+private void AssignSettler(other_id)
+{
+    // add settler to own lists and info
+    // tell settler to assign himself to this building (with event)
+        // AssignToWork(this.id)
+        // AssignToRepair(this.id)
+        // AssignToStay(this.id)
+}    
+
+
+
