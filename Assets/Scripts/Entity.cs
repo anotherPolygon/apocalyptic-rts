@@ -8,13 +8,14 @@ public class Entity : MonoBehaviour
 {
     public GameObject player;
     private MouseInputManager mouseInput;
-    private NavMeshAgent agent;
-    
+    public NavMeshAgent agent;
 
     public bool isSelected = false;
     public int health = 100;
     public int maxHealth = 100;
     public Transform HBtrasform;
+
+    private EntitiesActions EAcations;
 
     // The following enum "InteractionOptions" holds all the action an entity may RECIEVE from antoher entity
     //      these option will be associated with a method that exists at the recieving entity (this method will
@@ -46,7 +47,6 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-
         agent = GetComponent<NavMeshAgent>();
 
         player = GameObject.Find("Player");
@@ -58,31 +58,27 @@ public class Entity : MonoBehaviour
         GameEvents.current.onEntitySelectionTigger += onEntitySeletcion;
         GameEvents.current.onUnitMultiSelectTrigger += onUnitMultiSelect;
 
+        EAcations = new EntitiesActions();
+
     }
     
-     private void onApplyMainObjectMethod(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
+     private void onApplyMainObjectMethod(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
      {
         if (isSelected)
-        { 
-            int i = 0;
-            foreach(Entity entity in selectedEntetiesList)
+        {
+            if (targetObject.name == "terrain")
             {
-                if(entity.agent != null)
-                {
-                    entity.agent.destination = point + new Vector3(0, 0, i);
-                    i += 2;
-                }
-                    
+                // calculating the space needed in multiple selection
+                float positionSpace = selectedGameObjectsList.IndexOf(gameObject);
+                // initating movement
+                EAcations.MoveToPostion(agent, point, positionSpace);
             }
-                //agent.destination = point;
+            else if (targetObject.tag == "Building")
+            {
+                EAcations.onAssignedWorkerToBuildingTrigger(targetObject, gameObject);
+                Debug.Log("Assigned to building");
+            }
         }
-
-            
-        //if (selectedObject == gameObject)
-        //{
-        //    Debug.Log("" + gameObject + " doing " + point);
-        //    agent.destination = point;
-        //}
     }
 
     private void onEntitySeletcion(GameObject selectedObject)

@@ -12,12 +12,6 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    //public event Action selectedObjectRightClick;
-    //public void onSelectedObjectRightClick()
-    //{
-    //    if selectedObjectRightClick
-    //}
-
     public event Action<GameObject> onEntitySelectionTigger;
     public void entitySelectionTigger(GameObject gameObjectInstance)
     {
@@ -45,12 +39,21 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<List<Entity>, GameObject, Vector3> onApplyMainObjectMethodTrigger;
-    public void applyMainObjectMethod(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
+    public event Action<List<GameObject>, GameObject, Vector3> onApplyMainObjectMethodTrigger;
+    public void applyMainObjectMethod(List<GameObject> selectedEntetiesList, GameObject targetObject, Vector3 point)
     {
         if (onApplyMainObjectMethodTrigger  != null)
         {
             onApplyMainObjectMethodTrigger(selectedEntetiesList, targetObject, point);
+        }
+    }
+
+    public event Action<GameObject, GameObject> onAssignedWorkerToBuildingTrigger;
+    public void assingWorkerToBuilding(GameObject bulidingGameObjec, GameObject worker)
+    {
+        if (onAssignedWorkerToBuildingTrigger != null)
+        {
+            onAssignedWorkerToBuildingTrigger(bulidingGameObjec, worker);
         }
     }
 

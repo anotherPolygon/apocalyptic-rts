@@ -11,7 +11,7 @@ public class MouseInputManager : MonoBehaviour
     private GameObject rayCastHitObject;
     public GameObject recievedSelectedObject;
 
-    public List<Entity> selectedEntities = new List<Entity>();
+    public List<GameObject> selectedEntitiesGameObjects = new List<GameObject>();
     private Entity[] entites;
 
     public Image selectionBox;
@@ -60,7 +60,7 @@ public class MouseInputManager : MonoBehaviour
             isSelecting = true;
 
             // Reseting the list
-            selectedEntities = new List<Entity>();
+            selectedEntitiesGameObjects = new List<GameObject>();
         }
         //If we never set the selectionBox variable in the inspector, we are simply not able to drag the selectionBox to easily select multiple objects. 'Regular' selection should still work
         if (selectionBox == null)
@@ -75,8 +75,9 @@ public class MouseInputManager : MonoBehaviour
             entites = UnityEngine.Object.FindObjectsOfType<Entity>();
             foreach(Entity entity in entites)
             {
+                GameObject entitiyGameObject = entity.gameObject;
                 if (entity.isSelected)
-                    selectedEntities.Add(entity);
+                    selectedEntitiesGameObjects.Add(entitiyGameObject);
             }
 
         }
@@ -116,7 +117,7 @@ public class MouseInputManager : MonoBehaviour
             {
                 rayCastHitObject = hit.collider.gameObject;
             }
-            onApplyMainObjectMethodTrigger(selectedEntities, rayCastHitObject, hit.point);
+            onApplyMainObjectMethodTrigger(selectedEntitiesGameObjects, rayCastHitObject, hit.point);
         }
                 
     }
@@ -135,7 +136,7 @@ public class MouseInputManager : MonoBehaviour
                 rayCastHitObject = hit.collider.gameObject;
                 onEntitySelectionTrigger(rayCastHitObject);
                 if(recievedSelectedObject != null)
-                    selectedEntities.Add(recievedSelectedObject.GetComponent<Entity>());
+                    selectedEntitiesGameObjects.Add(recievedSelectedObject);
                 Debug.Log(rayCastHitObject);
             }
             else
@@ -158,7 +159,7 @@ public class MouseInputManager : MonoBehaviour
         GameEvents.current.unitMultiSelectTrigger(selectionBoxBounds);
     }
 
-    private void onApplyMainObjectMethodTrigger(List<Entity> selectedEntetiesList, GameObject targetObject, Vector3 point)
+    private void onApplyMainObjectMethodTrigger(List<GameObject> selectedEntetiesList, GameObject targetObject, Vector3 point)
     {
         GameEvents.current.applyMainObjectMethod(selectedEntetiesList, targetObject, point);
     }
