@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Building : Entity
 {
-    public bool IsOwenedByPlayer = true;
+  
 
     public List<GameObject> AssignedWorkers = new List<GameObject>();
+    public int maxWorkers = 1;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onAssignedWorkerToBuildingTrigger += onAssignedWorkerToBuilding;
+        GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
+        this.isBuilding = true;
     }
 
     // Update is called once per frame
@@ -21,14 +23,19 @@ public class Building : Entity
         
     }
 
-    public void onAssignedWorkerToBuilding(GameObject bulidingGameObject, GameObject worker)
+    public void AskAssignToBuildingCallback(GameObject bulidingGameObject, GameObject worker)
     {
-        if(gameObject == bulidingGameObject && IsOwenedByPlayer)
+        if(gameObject == bulidingGameObject && isOwnedByPlayer)
         {
             if(AssignedWorkers.Contains(worker) == false)
                 AssignedWorkers.Add(worker);
         }
         
+    }
+
+    public void AssignWorkers()
+    {
+       // implement
     }
 
 

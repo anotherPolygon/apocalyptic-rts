@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EntitiesActions : MonoBehaviour
+public class UnitsActions : MonoBehaviour
 {
     private Game Game;
     private dynamic identityScript;
@@ -28,9 +28,9 @@ public class EntitiesActions : MonoBehaviour
     }
 
 
-    public void onAssignedWorkerToBuildingTrigger(GameObject bulidingGameObjec, GameObject worker)
+    public void askAssignToBuilding(GameObject bulidingGameObjec, GameObject worker)
     {
-        GameEvents.current.assingWorkerToBuilding(bulidingGameObjec, worker);
+        GameEvents.current.askAssignToBuilding(bulidingGameObjec, worker);
 
     }
 

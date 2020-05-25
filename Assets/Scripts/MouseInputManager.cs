@@ -24,7 +24,7 @@ public class MouseInputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onSelectedTrigger += onSelected;
+        GameEvents.current.reportSelectedTrigger += SelectedCallback;
         recievedSelectedObject = null;
 
         if (selectionBox != null)
@@ -152,20 +152,20 @@ public class MouseInputManager : MonoBehaviour
     }
     private void onEntitySelectionTrigger(GameObject gameObjectInstance)
     {
-        GameEvents.current.entitySelectionTigger(gameObjectInstance);
+        GameEvents.current.entitySelection(gameObjectInstance);
     }
     private void onUnitMultiSelectTrigger(Bounds selectionBoxBounds)
     {
-        GameEvents.current.unitMultiSelectTrigger(selectionBoxBounds);
+        GameEvents.current.multiSelection(selectionBoxBounds);
     }
 
     private void onApplyMainObjectMethodTrigger(List<GameObject> selectedEntetiesList, GameObject targetObject, Vector3 point)
     {
-        GameEvents.current.applyMainObjectMethod(selectedEntetiesList, targetObject, point);
+        GameEvents.current.executeMainMethod(selectedEntetiesList, targetObject, point);
     }
 
 
-    private void onSelected(GameObject SelectedObject)
+    private void SelectedCallback(GameObject SelectedObject)
     {
         recievedSelectedObject = SelectedObject;
 
