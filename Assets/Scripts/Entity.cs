@@ -80,6 +80,7 @@ public class Entity : MonoBehaviour
                 // initating movement
                 UActions.MoveToPostion(agent, point, positionSpace);
                 GameEvents.current.assignmentEnd(currentAssignedBuilding, gameObject);
+                currentAssignedBuilding = null;
             }
 
             // targetObject is an entity:
@@ -207,9 +208,9 @@ public class Entity : MonoBehaviour
             HBtrasform.gameObject.SetActive(selectionBool);
     }
 
-    public void assignmentStartCallbck(GameObject bulidingGameObjec, GameObject worker)
+    public void assignmentStartCallbck(GameObject bulidingGameObject, GameObject worker)
     {
         GameEvents.current.assignmentEnd(currentAssignedBuilding, worker);
-        currentAssignedBuilding = bulidingGameObjec;
+        currentAssignedBuilding = bulidingGameObject;
     }
 }
