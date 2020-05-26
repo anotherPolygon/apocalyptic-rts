@@ -27,7 +27,7 @@ public class Entity : MonoBehaviour
 
     // into Unit Script:
     public UnitsActions UActions;// A script the contains Units actions
-    GameObject currentAssignedBuilding; // current building that
+    public GameObject currentAssignedBuilding; // current building that
     public NavMeshAgent agent;
 
     public enum UnitsMethods 
@@ -107,7 +107,7 @@ public class Entity : MonoBehaviour
                         else
                         {
                             // Work Own Building
-                            Debug.Log("" + gameObject + " asks to assign to " + targetObject);
+                            Debug.Log("" + gameObject.name + " asks to assign to " + targetObject.name);
                             UActions.askAssignToBuilding(targetObject, gameObject);
                             
                         }
@@ -126,7 +126,10 @@ public class Entity : MonoBehaviour
                     // Resource
                     if (gameObjectClass.isResource)
                     {
-
+                        Debug.Log("Resource " + gameObjectClass.name);
+                        Vector3 resourcePostion = gameObjectClass.transform.position;
+                        Resource resourceObject = gameObjectClass.GetComponent<Resource>();
+                        Debug.Log(resourceObject.AssociatedDropOffBuildig[0].transform.position);
                     }
                     // Enemy
                     else if (gameObjectClass.isEnemy)

@@ -14,7 +14,7 @@ public class Building : Entity
     {
         GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
         GameEvents.current.assignmentEndTrigger += EndAssignmentCallback;
-        this.isBuilding = true;
+        isBuilding = true;
     }
 
     // Update is called once per frame
@@ -30,18 +30,21 @@ public class Building : Entity
         // Identify if this bulding is the target building
         if (gameObject == bulidingGameObject)
         {
-            if (AssignedWorkers.Contains(worker) == false && AssignedWorkers.Count < maxWorkers)
+            if (AssignedWorkers.Contains(worker) == false)
             {
+                if(AssignedWorkers.Count < maxWorkers)
+                {
                 // Accept
                 GameEvents.current.buildingAssignmentConfirmed(bulidingGameObject, worker);
                 AssignWorker(worker);
-                Debug.Log("Building accepts " + worker);
-            }
-            else
-            {
+                Debug.Log("Building accepts " + worker.name);
+                }
+                else
+                {
                 //Refuse
                 GameEvents.current.buildingAssignmentDenied(worker, bulidingGameObject);
                 Debug.Log("Building is full, thanks");
+                }
             }
 
         }
