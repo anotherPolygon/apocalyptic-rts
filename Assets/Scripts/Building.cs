@@ -13,6 +13,7 @@ public class Building : Entity
     void Start()
     {
         GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
+        GameEvents.current.assignmentEndTrigger += EndAssignmentCallback;
         this.isBuilding = true;
     }
 
@@ -23,20 +24,48 @@ public class Building : Entity
         
     }
 
-    public void AskAssignToBuildingCallback(GameObject bulidingGameObject, GameObject worker)
+    public void AskAssignToBuildingCallback(
+        GameObject bulidingGameObject, GameObject worker)
     {
-        if(gameObject == bulidingGameObject && isOwnedByPlayer)
+        // Identify if this bulding is the target building
+        if (gameObject == bulidingGameObject)
         {
-            if(AssignedWorkers.Contains(worker) == false)
-                AssignedWorkers.Add(worker);
+            if (AssignedWorkers.Contains(worker) == false && AssignedWorkers.Count < maxWorkers)
+            {
+                // Accept
+                GameEvents.current.buildingAssignmentConfirmed(bulidingGameObject, worker);
+                AssignWorker(worker);
+                Debug.Log("Building accepts " + worker);
+            }
+            else
+            {
+                //Refuse
+                GameEvents.current.buildingAssignmentDenied(worker, bulidingGameObject);
+                Debug.Log("Building is full, thanks");
+            }
+
         }
-        
     }
 
-    public void AssignWorkers()
+    public void EndAssignmentCallback(GameObject bulidingGameObject, GameObject worker)
     {
-       // implement
+        if (gameObject == bulidingGameObject)
+        {
+            RemoveWorker(worker);
+        }
+            
     }
+
+    public void AssignWorker(GameObject worker)
+    {
+        AssignedWorkers.Add(worker);
+    }
+
+    public void RemoveWorker(GameObject worker)
+    {
+        AssignedWorkers.Remove(worker);
+    }
+
 
 
 }

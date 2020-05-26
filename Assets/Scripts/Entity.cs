@@ -8,14 +8,11 @@ public class Entity : MonoBehaviour
 {
     public GameObject player;
     private MouseInputManager mouseInput;
-    public NavMeshAgent agent;
 
     public bool isSelected = false;
     public int health = 100;
     public int maxHealth = 100;
     public Transform HBtrasform;
-
-    private UnitsActions UActions;
 
     // Identity definition -  will be deprecated by specific entity:
     public bool isUnit = false;
@@ -28,8 +25,12 @@ public class Entity : MonoBehaviour
     public bool isOwnedByPlayer = true;
     public bool isEnemy = false;
 
+    // into Unit Script:
+    public UnitsActions UActions;// A script the contains Units actions
+    GameObject currentAssignedBuilding; // current building that
+    public NavMeshAgent agent;
 
-    public enum EntitiesMethods // FUTURE REFACTOR: to be changed to UnitsMetods
+    public enum UnitsMethods 
     {
         Work,
         Gather, 
@@ -40,11 +41,11 @@ public class Entity : MonoBehaviour
         Trade, 
     }
 
-    public EntitiesMethods currentMethod;
+    public UnitsMethods currentMethod;
 
 
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
@@ -53,19 +54,18 @@ public class Entity : MonoBehaviour
 
         HBtrasform = transform.Find("HB");
 
-        GameEvents.current.executeMainMethodTrigger += ExecuteMainMethodCallback;
+        // Selection events
         GameEvents.current.entitySelectionTrigger += EntitySelectionCallback;
         GameEvents.current.multiSelectionTrigger += MultiSelcetionCallback;
-
-        // Reference to a script that manages the possible actions of an entity
-        UActions = new UnitsActions();
+        // Method events
+        GameEvents.current.executeMainMethodTrigger += ExecuteMainMethodCallback;
+        GameEvents.current.buildingAssignmentConfirmedTrigger += assignmentStartCallbck;
 
         // Setting a defauls method
-        currentMethod = EntitiesMethods.Work;
+        currentMethod = UnitsMethods.Work;
 
-
-
-
+        UActions = new UnitsActions();
+        currentAssignedBuilding = null;
     }
     
      private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
@@ -79,47 +79,70 @@ public class Entity : MonoBehaviour
                 float positionSpace = selectedGameObjectsList.IndexOf(gameObject);
                 // initating movement
                 UActions.MoveToPostion(agent, point, positionSpace);
+                GameEvents.current.assignmentEnd(currentAssignedBuilding, gameObject);
             }
-            
+
             // targetObject is an entity:
             else
             {
                 // Grabbing the targetObject Entity cast script
                 Entity gameObjectClass = targetObject.GetComponent<Entity>();
 
-                currentMethod = EntitiesMethods.Work;
+                currentMethod = UnitsMethods.Work;
                 // Player's side
-                if(gameObjectClass.isOwnedByPlayer)
+                if (gameObjectClass.isOwnedByPlayer)
                 {
                     if (gameObjectClass.isBuilding)
                     {
                         // Work, Repair or Guard
-                        if(currentMethod == EntitiesMethods.Guard)
+                        if (currentMethod == UnitsMethods.Guard)
                         {
                             // Guard Own Building
                         }
-                        else if(currentMethod == EntitiesMethods.Repair)
+                        else if (currentMethod == UnitsMethods.Repair)
                         {
                             // Repair Own Building
                         }
-                        
-
-                        UActions.askAssignToBuilding(targetObject, gameObject);
-                        Debug.Log("Assigned to building");
+                        else
+                        {
+                            // Work Own Building
+                            Debug.Log("" + gameObject + " asks to assign to " + targetObject);
+                            UActions.askAssignToBuilding(targetObject, gameObject);
+                            
+                        }
                     }
-                }
-                // An enemy
-                else if (gameObjectClass.isOwnedByPlayer)
-                {
+                    else if (gameObjectClass.isUnit)
+                    {
 
+                    }
+
+                    
+                    
                 }
-                // A neutral NPC
+                // Not Owned By Player
                 else
                 {
+                    // Resource
+                    if (gameObjectClass.isResource)
+                    {
+
+                    }
+                    // Enemy
+                    else if (gameObjectClass.isEnemy)
+                    {
+
+                    }
+                    // A neutral NPC
+                    else
+                    {
+
+                    }
 
                 }
 
-                
+
+
+
             }
             
         }
@@ -182,5 +205,11 @@ public class Entity : MonoBehaviour
     {
         if(HBtrasform != null)
             HBtrasform.gameObject.SetActive(selectionBool);
+    }
+
+    public void assignmentStartCallbck(GameObject bulidingGameObjec, GameObject worker)
+    {
+        GameEvents.current.assignmentEnd(currentAssignedBuilding, worker);
+        currentAssignedBuilding = bulidingGameObjec;
     }
 }

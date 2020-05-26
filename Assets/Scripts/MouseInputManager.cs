@@ -11,7 +11,7 @@ public class MouseInputManager : MonoBehaviour
     private GameObject rayCastHitObject;
     public GameObject recievedSelectedObject;
 
-    public List<GameObject> selectedEntitiesGameObjects = new List<GameObject>();
+    public List<GameObject> selectedEntitiesGameObjects;
     private Entity[] entites;
 
     public Image selectionBox;
@@ -37,6 +37,8 @@ public class MouseInputManager : MonoBehaviour
             selectionBox.gameObject.SetActive(false);
 
         }
+
+        selectedEntitiesGameObjects = new List<GameObject>();
     }
 
     void FixedUpdate()
