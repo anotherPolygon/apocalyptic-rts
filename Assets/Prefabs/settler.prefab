@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: 6383222216403907090}
   - component: {fileID: 6383222216403907091}
   - component: {fileID: 6383222216403907116}
+  - component: {fileID: 5683143137274676255}
   m_Layer: 0
   m_Name: settler
   m_TagString: Untagged
@@ -304,6 +305,27 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5683143137274676255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6383222216403907088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a363319a36d34fe46a91261807f6f4ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
+  isBuilding: 0
+  isResource: 0
+  isPlayer: 0
+  isSelected: 0
 --- !u!1 &6383222216506129840
 GameObject:
   m_ObjectHideFlags: 0

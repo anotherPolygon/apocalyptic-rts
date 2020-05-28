@@ -29,6 +29,11 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        DebugConsole = GetComponent<DebugConsole>();
+    }
+
     private int GenerateId()
     {
         last_id += 1;

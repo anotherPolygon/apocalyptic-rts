@@ -19,13 +19,13 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
-        Game.Instance.DebugConsole.Log("starting", "Entity");
+
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        
+        Game.Instance.DebugConsole.Log("starting", "Entity");
     }
 
 

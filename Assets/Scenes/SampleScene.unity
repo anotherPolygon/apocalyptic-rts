@@ -409,14 +409,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167bac53179e00b40b4123e639076ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  agent: {fileID: 0}
+  isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
+  isBuilding: 0
+  isResource: 0
+  isPlayer: 0
   isSelected: 0
-  health: 100
-  maxHealth: 100
-  HBtrasform: {fileID: 0}
-  IsOwenedByPlayer: 1
   AssignedWorkers: []
+  maxWorkers: 1
 --- !u!208 &131963472
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1715,21 +1718,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c909336398e764285dea59a17118db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  isSelected: 0
-  health: 100
-  maxHealth: 100
-  HBtrasform: {fileID: 0}
   isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
   isBuilding: 0
   isResource: 0
-  entityName: 
-  isOwnedByPlayer: 1
-  isEnemy: 0
-  UActions: {fileID: 0}
-  currentAssignedBuilding: {fileID: 0}
-  agent: {fileID: 0}
-  currentMethod: 0
+  isPlayer: 0
+  isSelected: 0
   RM: {fileID: 0}
   AssociatedDropOffBuildig: []
 --- !u!1 &1209878665
@@ -1789,7 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7f2b026c610f4742b8ea7af6677b342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugConsole: {fileID: 1209878666}
+  DebugConsole: {fileID: 0}
 --- !u!1 &1250937579
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,11 +2585,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  agent: {fileID: 0}
   isSelected: 0
   health: 100
   maxHealth: 100
   HBtrasform: {fileID: 0}
+  isUnit: 0
+  isBuilding: 0
+  isResource: 0
+  entityName: 
+  isOwnedByPlayer: 1
+  isEnemy: 0
+  UActions: {fileID: 0}
+  currentAssignedBuilding: {fileID: 0}
+  agent: {fileID: 0}
+  currentMethod: 0
 --- !u!208 &1860137847
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2643,14 +2649,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167bac53179e00b40b4123e639076ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  agent: {fileID: 0}
+  isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
+  isBuilding: 0
+  isResource: 0
+  isPlayer: 0
   isSelected: 0
-  health: 100
-  maxHealth: 100
-  HBtrasform: {fileID: 0}
-  IsOwenedByPlayer: 1
   AssignedWorkers: []
+  maxWorkers: 1
 --- !u!82 &2018919807
 AudioSource:
   m_ObjectHideFlags: 0

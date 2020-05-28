@@ -139,11 +139,11 @@ public class MouseInputManager : MonoBehaviour
                 onEntitySelectionTrigger(rayCastHitObject);
                 if(recievedSelectedObject != null)
                     selectedEntitiesGameObjects.Add(recievedSelectedObject);
-                Debug.Log(rayCastHitObject);
+                Game.Instance.DebugConsole.Log(rayCastHitObject, "Ray Cast Hit");
             }
             else
             {
-                Debug.Log("GUI - Ray case hit GUI");
+                Game.Instance.DebugConsole.Log("GUI - Ray case hit GUI", "Ray Cast Hit");
             }
 
         }
