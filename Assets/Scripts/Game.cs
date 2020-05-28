@@ -44,4 +44,9 @@ public class Game : MonoBehaviour
         entity2id.Add(entityToRegister, id);
     }
 
+    public bool IsPlayer(int id)
+    {
+        return id2entity[id].isPlayer;
+    }
+
 }

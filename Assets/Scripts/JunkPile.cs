@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingJunkPile : Building
+public class JunkPile : Building
 {
     public ResourceManager RM;
 
     // Start is called before the first frame update
-    void Start()
+    protected new void Start()
     {
         // Referencing the ResourceManager script
         RM = GameObject.Find("Player").GetComponent<ResourceManager>();
@@ -28,7 +28,7 @@ public class BuildingJunkPile : Building
         RM.JunkPilesContainers.Remove(gameObject);
     }
     // Update is called once per frame
-    void Update()
+    protected new void Update()
     {
         
     }

@@ -8,11 +8,10 @@ public class Resource : Entity
     public List<GameObject> AssociatedDropOffBuildig;
 
     // Start is called before the first frame update
-    void Start()
+    protected new void Start()
     {
         // Defining the entity as Resource
-        isResource = true;
-        isOwnedByPlayer = false;
+        this.isResource = true;
         
         // gettin a reffernce to the resource manager
         RM = GameObject.Find("Player").GetComponent<ResourceManager>();
@@ -25,7 +24,7 @@ public class Resource : Entity
    
 
     // Update is called once per frame
-    void Update()
+    protected new void Update()
     {
         
     }

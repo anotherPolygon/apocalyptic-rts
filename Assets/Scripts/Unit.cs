@@ -7,13 +7,13 @@ public class Unit : Entity
     //private Game Game;
 
     // Start is called before the first frame update
-    void Start()
+    protected new void Start()
     {
     //    Game = GameObject.Find("Game").GetComponent<Game>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected new void Update()
     {
         
     }

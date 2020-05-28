@@ -5,13 +5,13 @@ using UnityEngine;
 public class Animated : Unit
 {
     // Start is called before the first frame update
-    void Start()
+    protected new void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    protected new void Update()
     {
         
     }

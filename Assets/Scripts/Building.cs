@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class Building : Entity
 {
-  
-
     public List<GameObject> AssignedWorkers = new List<GameObject>();
     public int maxWorkers = 1;
 
     // Start is called before the first frame update
-    void Start()
+    protected new void Start()
     {
         GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
         GameEvents.current.assignmentEndTrigger += EndAssignmentCallback;
-        isBuilding = true;
+        this.isBuilding = true;
     }
 
     // Update is called once per frame
 
-    void Update()
+    protected new void Update()
     {
         
     }
