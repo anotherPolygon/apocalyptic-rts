@@ -29,6 +29,7 @@ public class Entity : MonoBehaviour
     public UnitsActions UActions;// A script the contains Units actions
     public GameObject currentAssignedBuilding; // current building that
     public NavMeshAgent agent;
+    Color settlerColor;
 
     public enum UnitsMethods 
     {
@@ -66,8 +67,21 @@ public class Entity : MonoBehaviour
 
         UActions = new UnitsActions();
         currentAssignedBuilding = null;
+
+        settlerColor = gameObject.GetComponentInChildren<Renderer>().material.color;
     }
-    
+    private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
+    {
+        // is this unit selected?
+        //   move to postition()
+        // if not selected?
+        //      if target is player
+        //          if is building
+        //              try to assign()
+
+    }
+
+
      private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
      {
         if (isSelected)
@@ -81,6 +95,7 @@ public class Entity : MonoBehaviour
                 UActions.MoveToPostion(agent, point, positionSpace);
                 GameEvents.current.assignmentEnd(currentAssignedBuilding, gameObject);
                 currentAssignedBuilding = null;
+                gameObject.GetComponentInChildren<Renderer>().material.color = settlerColor;
             }
 
             // targetObject is an entity:
@@ -192,7 +207,7 @@ public class Entity : MonoBehaviour
         GameEvents.current.reportSelected(gameObjectInstance);
     }
 
-        private void OnDestroy()
+    private void OnDestroy()
     {
         GameEvents.current.entitySelectionTrigger -= EntitySelectionCallback;
         GameEvents.current.multiSelectionTrigger -= MultiSelcetionCallback;
@@ -215,5 +230,7 @@ public class Entity : MonoBehaviour
     {
         GameEvents.current.assignmentEnd(currentAssignedBuilding, worker);
         currentAssignedBuilding = bulidingGameObject;
+        worker.GetComponentInChildren<Renderer>().material.color = bulidingGameObject.GetComponent<Renderer>().material.color;
+        
     }
 }
