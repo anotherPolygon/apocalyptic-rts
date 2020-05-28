@@ -8,44 +8,45 @@ public class Entity : MonoBehaviour
 {
     public GameObject player;
     private MouseInputManager mouseInput;
-    public NavMeshAgent agent;
 
     public bool isSelected = false;
     public int health = 100;
     public int maxHealth = 100;
     public Transform HBtrasform;
 
-    private EntitiesActions EAcations;
+    // Identity definition -  will be deprecated by specific entity:
+    public bool isUnit = false;
+    public bool isBuilding = false;
+    public bool isResource = false;
 
-    // The following enum "InteractionOptions" holds all the action an entity may RECIEVE from antoher entity
-    //      these option will be associated with a method that exists at the recieving entity (this method will
-    //      get information from the acting entity, for example how severe is its attack power)
-    public enum InteractionOptions
-    {
-        getAttacked,
-        getRepaired,
-        getHealed,
-        getUsed,
-        getKiddnaped,
-        getWorked,
-        getGuarded,
-    }
+    public string entityName; // to be defined via editor
 
-    // The following enum "ActionOptions" holds all the action an entity may apply on another entity
-    public enum ActionOptions
+    // To be defined in inhertence on Start():
+    public bool isOwnedByPlayer = true;
+    public bool isEnemy = false;
+
+    // into Unit Script:
+    public UnitsActions UActions;// A script the contains Units actions
+    public GameObject currentAssignedBuilding; // current building that
+    public NavMeshAgent agent;
+    Color settlerColor;
+
+    public enum UnitsMethods 
     {
-        Attack,
-        Repair,
-        Heal,
-        Use,
-        Kiddnap,
-        work,
+        Work,
+        Gather, 
         Guard,
+        Repair,
+        Steal,
+        Attack,
+        Trade, 
     }
+
+    public UnitsMethods currentMethod;
 
 
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
@@ -54,40 +55,125 @@ public class Entity : MonoBehaviour
 
         HBtrasform = transform.Find("HB");
 
-        GameEvents.current.onApplyMainObjectMethodTrigger += onApplyMainObjectMethod;
-        GameEvents.current.onEntitySelectionTigger += onEntitySeletcion;
-        GameEvents.current.onUnitMultiSelectTrigger += onUnitMultiSelect;
+        // Selection events
+        GameEvents.current.entitySelectionTrigger += EntitySelectionCallback;
+        GameEvents.current.multiSelectionTrigger += MultiSelcetionCallback;
+        // Method events
+        GameEvents.current.executeMainMethodTrigger += ExecuteMainMethodCallback;
+        GameEvents.current.buildingAssignmentConfirmedTrigger += assignmentStartCallbck;
 
-        EAcations = new EntitiesActions();
+        // Setting a defauls method
+        currentMethod = UnitsMethods.Work;
+
+        UActions = new UnitsActions();
+        currentAssignedBuilding = null;
+
+        settlerColor = gameObject.GetComponentInChildren<Renderer>().material.color;
+    }
+    private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
+    {
+        // is this unit selected?
+        //   move to postition()
+        // if not selected?
+        //      if target is player
+        //          if is building
+        //              try to assign()
 
     }
-    
-     private void onApplyMainObjectMethod(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
+
+
+     private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
      {
         if (isSelected)
         {
+            // targetObject is an terrain:
             if (targetObject.name == "terrain")
             {
                 // calculating the space needed in multiple selection
                 float positionSpace = selectedGameObjectsList.IndexOf(gameObject);
                 // initating movement
-                EAcations.MoveToPostion(agent, point, positionSpace);
+                UActions.MoveToPostion(agent, point, positionSpace);
+                GameEvents.current.assignmentEnd(currentAssignedBuilding, gameObject);
+                currentAssignedBuilding = null;
+                gameObject.GetComponentInChildren<Renderer>().material.color = settlerColor;
             }
-            else if (targetObject.tag == "Building")
+
+            // targetObject is an entity:
+            else
             {
-                EAcations.onAssignedWorkerToBuildingTrigger(targetObject, gameObject);
-                Debug.Log("Assigned to building");
+                // Grabbing the targetObject Entity cast script
+                Entity gameObjectClass = targetObject.GetComponent<Entity>();
+
+                currentMethod = UnitsMethods.Work;
+                // Player's side
+                if (gameObjectClass.isOwnedByPlayer)
+                {
+                    if (gameObjectClass.isBuilding)
+                    {
+                        // Work, Repair or Guard
+                        if (currentMethod == UnitsMethods.Guard)
+                        {
+                            // Guard Own Building
+                        }
+                        else if (currentMethod == UnitsMethods.Repair)
+                        {
+                            // Repair Own Building
+                        }
+                        else
+                        {
+                            // Work Own Building
+                            Debug.Log("" + gameObject.name + " asks to assign to " + targetObject.name);
+                            UActions.askAssignToBuilding(targetObject, gameObject);
+                            
+                        }
+                    }
+                    else if (gameObjectClass.isUnit)
+                    {
+
+                    }
+
+                    
+                    
+                }
+                // Not Owned By Player
+                else
+                {
+                    // Resource
+                    if (gameObjectClass.isResource)
+                    {
+                        Debug.Log("Resource " + gameObjectClass.name);
+                        Vector3 resourcePostion = gameObjectClass.transform.position;
+                        Resource resourceObject = gameObjectClass.GetComponent<Resource>();
+                        Debug.Log(resourceObject.AssociatedDropOffBuildig[0].transform.position);
+                    }
+                    // Enemy
+                    else if (gameObjectClass.isEnemy)
+                    {
+
+                    }
+                    // A neutral NPC
+                    else
+                    {
+
+                    }
+
+                }
+
+
+
+
             }
+            
         }
     }
 
-    private void onEntitySeletcion(GameObject selectedObject)
+    private void EntitySelectionCallback(GameObject selectedObject)
     {
         if (selectedObject == gameObject)
         {
             isSelected = true;
             ShowThatEntityIsSelected(isSelected);
-            onSelectedTrigger(gameObject);
+            ReportSelected(gameObject);
 
         }
         else
@@ -98,14 +184,14 @@ public class Entity : MonoBehaviour
 
     }
 
-    private void onUnitMultiSelect(Bounds selectionBoxBounds)
+    private void MultiSelcetionCallback(Bounds selectionBoxBounds)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
         screenPos.z = 0;
         if (selectionBoxBounds.Contains(screenPos))
         {
             isSelected = true;
-            onSelectedTrigger(gameObject);
+            ReportSelected(gameObject);
             ShowThatEntityIsSelected(isSelected);
         }
         // Tryin to deselects when box leaves
@@ -116,15 +202,15 @@ public class Entity : MonoBehaviour
 
     }
 
-    private void onSelectedTrigger(GameObject gameObjectInstance)
+    private void ReportSelected(GameObject gameObjectInstance)
     {
-        GameEvents.current.selectedTrigger(gameObjectInstance);
+        GameEvents.current.reportSelected(gameObjectInstance);
     }
 
-        private void OnDestroy()
+    private void OnDestroy()
     {
-        GameEvents.current.onEntitySelectionTigger -= onEntitySeletcion;
-        GameEvents.current.onUnitMultiSelectTrigger -= onUnitMultiSelect;
+        GameEvents.current.entitySelectionTrigger -= EntitySelectionCallback;
+        GameEvents.current.multiSelectionTrigger -= MultiSelcetionCallback;
     }
 
     // Update is called once per frame
@@ -138,5 +224,13 @@ public class Entity : MonoBehaviour
     {
         if(HBtrasform != null)
             HBtrasform.gameObject.SetActive(selectionBool);
+    }
+
+    public void assignmentStartCallbck(GameObject bulidingGameObject, GameObject worker)
+    {
+        GameEvents.current.assignmentEnd(currentAssignedBuilding, worker);
+        currentAssignedBuilding = bulidingGameObject;
+        worker.GetComponentInChildren<Renderer>().material.color = bulidingGameObject.GetComponent<Renderer>().material.color;
+        
     }
 }

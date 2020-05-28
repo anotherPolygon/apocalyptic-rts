@@ -12,48 +12,90 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public event Action<GameObject> onEntitySelectionTigger;
-    public void entitySelectionTigger(GameObject gameObjectInstance)
+    public event Action<GameObject> entitySelectionTrigger;
+    public void entitySelection(GameObject gameObjectInstance)
     {
-        if (onEntitySelectionTigger != null)
+        if (entitySelectionTrigger != null)
         {
-            onEntitySelectionTigger(gameObjectInstance);
+            entitySelectionTrigger(gameObjectInstance);
         }
     }
 
-    public event Action<Bounds> onUnitMultiSelectTrigger;
-    public void unitMultiSelectTrigger(Bounds selectionBoxBounds)
+    public event Action<Bounds> multiSelectionTrigger;
+    public void multiSelection(Bounds selectionBoxBounds)
     {
-        if (onUnitMultiSelectTrigger != null)
+        if (multiSelectionTrigger != null)
         {
-            onUnitMultiSelectTrigger(selectionBoxBounds);
+            multiSelectionTrigger(selectionBoxBounds);
         }
     }
 
-    public event Action<GameObject> onSelectedTrigger;
-    public void selectedTrigger(GameObject gameObjectInstance)
+    public event Action<GameObject> reportSelectedTrigger;
+    public void reportSelected(GameObject gameObjectInstance)
     {
-        if (onSelectedTrigger != null)
+        if (reportSelectedTrigger != null)
         {
-            onSelectedTrigger(gameObjectInstance);
+            reportSelectedTrigger(gameObjectInstance);
         }
     }
 
-    public event Action<List<GameObject>, GameObject, Vector3> onApplyMainObjectMethodTrigger;
-    public void applyMainObjectMethod(List<GameObject> selectedEntetiesList, GameObject targetObject, Vector3 point)
+    public event Action<List<GameObject>, GameObject, Vector3> executeMainMethodTrigger;
+    public void executeMainMethod(List<GameObject> selectedEntetiesList, GameObject targetObject, Vector3 point)
     {
-        if (onApplyMainObjectMethodTrigger  != null)
+        if (executeMainMethodTrigger  != null)
         {
-            onApplyMainObjectMethodTrigger(selectedEntetiesList, targetObject, point);
+            executeMainMethodTrigger(selectedEntetiesList, targetObject, point);
         }
     }
 
-    public event Action<GameObject, GameObject> onAssignedWorkerToBuildingTrigger;
-    public void assingWorkerToBuilding(GameObject bulidingGameObjec, GameObject worker)
+    // Building Assingment
+    //  Unit side - Ask
+    public event Action<GameObject, GameObject> askAssignToBuildingTrigger;
+    public void askAssignToBuilding(GameObject bulidingGameObject, GameObject worker)
     {
-        if (onAssignedWorkerToBuildingTrigger != null)
+        if (askAssignToBuildingTrigger != null)
         {
-            onAssignedWorkerToBuildingTrigger(bulidingGameObjec, worker);
+            askAssignToBuildingTrigger(bulidingGameObject, worker);
+        }
+    }
+
+    //Unit side - Start
+    public event Action<GameObject, GameObject> assignmentStartTrigger;
+    public void assignmentStart(GameObject bulidingGameObject, GameObject worker)
+    {
+        if (assignmentStartTrigger != null)
+        {
+            assignmentStartTrigger(bulidingGameObject, worker);
+        }
+    }
+
+    //Unit side - End
+    public event Action<GameObject, GameObject> assignmentEndTrigger;
+    public void assignmentEnd(GameObject bulidingGameObject, GameObject worker)
+    {
+        if (assignmentEndTrigger != null)
+        {
+            assignmentEndTrigger(bulidingGameObject, worker);
+        }
+    }
+    
+    //Building side - Confirmed
+    public event Action<GameObject, GameObject> buildingAssignmentConfirmedTrigger;
+    public void buildingAssignmentConfirmed(GameObject bulidingGameObject, GameObject worker)
+    {
+        if (buildingAssignmentConfirmedTrigger != null)
+        {
+            buildingAssignmentConfirmedTrigger(bulidingGameObject, worker);
+        }
+    }
+
+    //Building side - Denied
+    public event Action<GameObject, GameObject> buildingAssignmentDeniedTrigger;
+    public void buildingAssignmentDenied(GameObject bulidingGameObject, GameObject worker)
+    {
+        if (buildingAssignmentDeniedTrigger != null)
+        {
+            buildingAssignmentDeniedTrigger(bulidingGameObject, worker);
         }
     }
 

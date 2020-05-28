@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EntitiesActions : MonoBehaviour
+public class UnitsActions : MonoBehaviour
 {
     private Game Game;
-    private dynamic identityScript;
 
     // Start is called before the first frame update
     void Start()
@@ -23,15 +22,14 @@ public class EntitiesActions : MonoBehaviour
 
     public void MoveToPostion(NavMeshAgent agent, Vector3 position, float positionSpace = 0f)
     {
-        if(agent != null)
+        if (agent != null)
             agent.destination = position + new Vector3(positionSpace, 0, positionSpace);
     }
 
 
-    public void onAssignedWorkerToBuildingTrigger(GameObject bulidingGameObjec, GameObject worker)
+    public void askAssignToBuilding(GameObject bulidingGameObjec, GameObject worker)
     {
-        GameEvents.current.assingWorkerToBuilding(bulidingGameObjec, worker);
+        GameEvents.current.askAssignToBuilding(bulidingGameObjec, worker);
 
     }
-
 }
