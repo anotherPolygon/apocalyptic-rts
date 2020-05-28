@@ -17,16 +17,19 @@ public class Entity : MonoBehaviour
 
     public common.UnityObjects UnityObjects;
 
+    public int id;
+
     // Start is called before the first frame update
     protected void Start()
     {
         UnityObjects = new common.UnityObjects(gameObject);
+        id = Game.Manager.RegisterObject(this);
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        Game.Instance.DebugConsole.Log("starting", "Entity");
+        Game.Manager.DebugConsole.Log("starting", "Entity");
     }
 
 

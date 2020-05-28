@@ -11,6 +11,8 @@ public class Unit : Entity
     {
         base.Start();
         HealthBar = transform.Find("HealthBar").gameObject;
+
+        GameEvents.current.entitySelectionTrigger += EntitySelectionCallback;
     }
 
     // Update is called once per frame
@@ -21,11 +23,35 @@ public class Unit : Entity
 
     public void Select()
     {
+        isSelected = true;
         HealthBar.SetActive(true);
     }
 
     public void Diselect()
     {
+        isSelected = false;
         HealthBar.SetActive(false);
+    }
+
+    private void EntitySelectionCallback(GameObject selectedObject)
+    {
+        if (selectedObject == gameObject)
+        {
+            Select();
+            ReportSelected(gameObject);
+            Game.Manager.DebugConsole.Log("Selected!", this.id);
+            
+        }
+        else
+        {
+            Diselect();
+            Game.Manager.DebugConsole.Log("Diselected!", this.id);
+        }
+
+    }
+
+    private void ReportSelected(GameObject gameObjectInstance)
+    {
+        GameEvents.current.reportSelected(gameObjectInstance);
     }
 }

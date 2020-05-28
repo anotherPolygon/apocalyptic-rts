@@ -16,22 +16,23 @@ public class DebugConsole : MonoBehaviour
         m_last_text_box = canvas.transform.GetChild(0).gameObject;
     }
 
-    public void Log(object message, string prefix)
+    public void Log(object message, object prefix)
     {
         Text _text;
         GameObject _gameObject;
+        string prefix_string = prefix.ToString();
 
-        if (!console.ContainsKey(prefix))
+        if (!console.ContainsKey(prefix_string))
         {
             _gameObject = Instantiate(m_last_text_box);
             _gameObject.transform.SetParent(canvas.transform);
             _gameObject.transform.position = m_last_text_box.transform.position;
             _gameObject.transform.position += Vector3.down * 14;
 
-            console.Add(prefix, _gameObject);
+            console.Add(prefix_string, _gameObject);
             m_last_text_box = _gameObject;
         }
-        _text = console[prefix].GetComponent<Text>();
+        _text = console[prefix_string].GetComponent<Text>();
         _text.text = prefix + ": " + message.ToString();
     }
 }
