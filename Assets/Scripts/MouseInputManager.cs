@@ -132,12 +132,17 @@ public class MouseInputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            // Identify if ray hit GUI
+            // if raycast hit a gameobject
             if (EventSystem.current.IsPointerOverGameObject(-1) == false)
             {
+                // get the gameobject from that we hit
                 rayCastHitObject = hit.collider.gameObject;
+
+                // Trigger event of selection in gameObject
                 onEntitySelectionTrigger(rayCastHitObject);
-                if(recievedSelectedObject != null)
+
+                // this is somehow to maintain a list of selected objects
+                if (recievedSelectedObject != null)
                     selectedEntitiesGameObjects.Add(recievedSelectedObject);
                 Game.Manager.DebugConsole.Log(rayCastHitObject, "Ray Cast Hit");
             }
