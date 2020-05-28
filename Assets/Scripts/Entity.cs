@@ -15,11 +15,12 @@ public class Entity : MonoBehaviour
     public bool isPlayer = false;
     public bool isSelected = false;
 
+    public common.UnityObjects UnityObjects;
 
     // Start is called before the first frame update
     protected void Start()
     {
-
+        UnityObjects = new common.UnityObjects(gameObject);
     }
 
     // Update is called once per frame
