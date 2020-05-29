@@ -29,7 +29,7 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        Game.Manager.DebugConsole.Log("starting", "Entity");
+
     }
 
 

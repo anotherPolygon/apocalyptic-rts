@@ -11,6 +11,7 @@ public class Game : MonoBehaviour
     //public Player Player;
     public CameraController CameraController;
     public Mouse Mouse;
+    public States States;
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>();
@@ -34,6 +35,9 @@ public class Game : MonoBehaviour
     public void Start()
     {
         DebugConsole = GetComponent<DebugConsole>();
+        Mouse = GetComponent<Mouse>();
+        CameraController = GetComponent<CameraController>();
+        States = GetComponent<States>();
     }
 
     private int GenerateId()

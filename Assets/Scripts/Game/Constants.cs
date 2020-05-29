@@ -9,6 +9,8 @@ public class Constants
     public const float selectionBoxMinimumAnchor = 0.5f;
     public const float selectionBoxMaximumAnchor = 0.5f;
 
-    public const int mouseLeftClickId = 0;
-    public const int mouseRightClickId = 1;
+    public const int mouseLeftButtonId = 0;
+    public const int mouseRightButtonId = 1;
+    public const int mouseMiddleButtonId = 2;
+    public const float mouseLongestClick = 0.25f;
 }

@@ -20,19 +20,20 @@ public class DebugConsole : MonoBehaviour
     {
         Text _text;
         GameObject _gameObject;
-        string prefix_string = prefix.ToString();
+        string prefixString = prefix.ToString();
 
-        if (!console.ContainsKey(prefix_string))
+        if (!console.ContainsKey(prefixString))
         {
             _gameObject = Instantiate(m_last_text_box);
+            _gameObject.name = prefixString;
             _gameObject.transform.SetParent(canvas.transform);
             _gameObject.transform.position = m_last_text_box.transform.position;
             _gameObject.transform.position += Vector3.down * 14;
 
-            console.Add(prefix_string, _gameObject);
+            console.Add(prefixString, _gameObject);
             m_last_text_box = _gameObject;
         }
-        _text = console[prefix_string].GetComponent<Text>();
+        _text = console[prefixString].GetComponent<Text>();
         _text.text = prefix + ": " + message.ToString();
     }
 }
