@@ -23,7 +23,7 @@ public class Entity : MonoBehaviour
     protected void Start()
     {
         UnityObjects = new common.UnityObjects(gameObject);
-        id = Game.Manager.RegisterObject(this);
+        id = Game.Manager.RegisterEntity(this);
     }
 
     // Update is called once per frame

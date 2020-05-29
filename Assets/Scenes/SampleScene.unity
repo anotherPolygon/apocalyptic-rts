@@ -418,6 +418,7 @@ MonoBehaviour:
   isResource: 0
   isPlayer: 0
   isSelected: 0
+  id: 0
   AssignedWorkers: []
   maxWorkers: 1
 --- !u!208 &131963472
@@ -613,8 +614,9 @@ GameObject:
   - component: {fileID: 160884950}
   - component: {fileID: 160884949}
   - component: {fileID: 160884948}
+  - component: {fileID: 160884952}
   m_Layer: 5
-  m_Name: SelectinoBoxCanvas
+  m_Name: selectionBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -692,14 +694,26 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1652412534}
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 1209878667}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &160884952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160884947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b823a1a12b2b5146bd410a262e53338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1691,7 +1705,7 @@ Transform:
   - {fileID: 856582234}
   - {fileID: 720426285}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1121436540
 SphereCollider:
@@ -1727,6 +1741,7 @@ MonoBehaviour:
   isResource: 0
   isPlayer: 0
   isSelected: 0
+  id: 0
   RM: {fileID: 0}
   AssociatedDropOffBuildig: []
 --- !u!1 &1209878665
@@ -1738,8 +1753,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1209878667}
-  - component: {fileID: 1209878666}
   - component: {fileID: 1209878668}
+  - component: {fileID: 1209878666}
+  - component: {fileID: 1209878672}
+  - component: {fileID: 1209878671}
+  - component: {fileID: 1209878670}
+  - component: {fileID: 1209878669}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1770,7 +1789,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 160884951}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1787,6 +1807,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugConsole: {fileID: 0}
+  CameraController: {fileID: 0}
+  Mouse: {fileID: 0}
+--- !u!114 &1209878669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209878665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 853d25d0f98fe574a9687c7a0a510916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectionBoxCanvas: {fileID: 0}
+--- !u!114 &1209878670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209878665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8773388332fbf4895834cbf529083d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panSpeed: 20
+  rotSpeed: 10
+  zoomSpeed: 50
+  borderWidth: 10
+  edgeScrolling: 1
+  cam: {fileID: 0}
+--- !u!114 &1209878671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209878665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c23c38c75841584e84aeedd816ff54b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JunkPilesContainers: []
+--- !u!114 &1209878672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209878665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d68f8621db194104e9bd31c1fe9284d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1250937579
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,7 +1877,6 @@ GameObject:
   - component: {fileID: 1250937582}
   - component: {fileID: 1250937581}
   - component: {fileID: 1250937580}
-  - component: {fileID: 1250937584}
   - component: {fileID: 1250937585}
   m_Layer: 0
   m_Name: Player
@@ -1886,22 +1963,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1250937584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1250937579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c42cecafe0aa0b64bb4f8340792fb065, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recievedSelectedObject: {fileID: 0}
-  selectedEntitiesGameObjects: []
-  selectionBox: {fileID: 1652412535}
-  canvas: {fileID: 160884950}
 --- !u!114 &1250937585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2036,7 +2097,7 @@ Transform:
   m_Children:
   - {fileID: 410985941}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1406506535
 MonoBehaviour:
@@ -2419,7 +2480,7 @@ GameObject:
   - component: {fileID: 1652412536}
   - component: {fileID: 1652412535}
   m_Layer: 5
-  m_Name: SelectionBox
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2658,6 +2719,7 @@ MonoBehaviour:
   isResource: 0
   isPlayer: 0
   isSelected: 0
+  id: 0
   AssignedWorkers: []
   maxWorkers: 1
 --- !u!82 &2018919807
@@ -3211,7 +3273,7 @@ PrefabInstance:
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}

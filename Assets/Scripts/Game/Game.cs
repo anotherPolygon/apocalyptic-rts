@@ -8,6 +8,10 @@ public class Game : MonoBehaviour
     public static Game Manager { get; private set; }
 
     public DebugConsole DebugConsole;
+    //public Player Player;
+    public CameraController CameraController;
+    public Mouse Mouse;
+
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>();
 
@@ -38,7 +42,7 @@ public class Game : MonoBehaviour
         return last_id;
     }
 
-    public int RegisterObject(Entity entityToRegister)
+    public int RegisterEntity(Entity entityToRegister)
     {
         int id = GenerateId();
         id2entity.Add(id, entityToRegister);

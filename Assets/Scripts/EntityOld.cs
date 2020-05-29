@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class EntityOld : MonoBehaviour
 {
     public GameObject player;
-    private MouseInputManager mouseInput;
+    //private MouseInputManager mouseInput;
 
     public bool isSelected = false;
     public int health = 100;
@@ -51,7 +51,7 @@ public class EntityOld : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         player = GameObject.Find("Player");
-        mouseInput = player.GetComponent<MouseInputManager>();
+        //mouseInput = player.GetComponent<MouseInputManager>();
 
         HBtrasform = transform.Find("HB");
 
