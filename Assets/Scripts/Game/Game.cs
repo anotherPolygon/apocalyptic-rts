@@ -8,15 +8,13 @@ public class Game : MonoBehaviour
     public static Game Manager { get; private set; }
 
     public DebugConsole DebugConsole;
-    //public Player Player;
     public CameraController CameraController;
     public Mouse Mouse;
-    public States States;
+    public State State;
+    //public Player Player;
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>();
-
-    int last_id = 0;
 
     private void Awake()
     {
@@ -37,18 +35,12 @@ public class Game : MonoBehaviour
         DebugConsole = GetComponent<DebugConsole>();
         Mouse = GetComponent<Mouse>();
         CameraController = GetComponent<CameraController>();
-        States = GetComponent<States>();
-    }
-
-    private int GenerateId()
-    {
-        last_id += 1;
-        return last_id;
+        State = GetComponent<State>();
     }
 
     public int RegisterEntity(Entity entityToRegister)
     {
-        int id = GenerateId();
+        int id = entityToRegister.UnityObjects.gameObject.GetInstanceID();
         id2entity.Add(id, entityToRegister);
         entity2id.Add(entityToRegister, id);
         return id;

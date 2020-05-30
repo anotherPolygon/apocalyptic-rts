@@ -24,6 +24,7 @@ public class Entity : MonoBehaviour
     {
         UnityObjects = new common.UnityObjects(gameObject);
         id = Game.Manager.RegisterEntity(this);
+        
     }
 
     // Update is called once per frame

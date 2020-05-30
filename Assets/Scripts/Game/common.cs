@@ -63,7 +63,7 @@ namespace common
     // class of unity objects for Entity to hold
     public class UnityObjects
     {
-        readonly GameObject gameObject;
+        public readonly GameObject gameObject;
         public UnityObjects(GameObject givenGameObject)
         {
             gameObject = givenGameObject;

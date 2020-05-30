@@ -42,11 +42,26 @@ public class Mouse : MonoBehaviour
         InitializeSelectionBox();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         GetInput();
         HandleInput();
+    }
+
+    private void GetInput()
+    {
+        bool _isClicked;
+        common.MouseButton button;
+
+        currentMousePosition = Input.mousePosition;
+        
+        foreach (int _id in buttonIds) {
+
+            button = buttons[_id];
+            _isClicked = Input.GetMouseButton(_id);
+
+            button.Update(_isClicked);
+        }
     }
 
     private void HandleInput()
@@ -54,18 +69,6 @@ public class Mouse : MonoBehaviour
         HandleLeftClick();
         HandleRightClick();
         HandleMiddleClick();
-    }
-
-    private void HandleLeftClick()
-    {
-        if (leftButton.hasClickJustStarted)
-            LeftClick();
-
-        if (leftButton.isHeld)
-            UpdateSelectionBox();
-
-        if (leftButton.hasClickJustEnded)
-            ApplySelectionBox();
     }
 
     private void InitializeMouseButtons()
@@ -86,24 +89,41 @@ public class Mouse : MonoBehaviour
         selectionBox.SetActive(false);
     }
 
-    private void GetInput()
+    private void HandleLeftClick()
     {
-        bool _isClicked;
-        common.MouseButton button;
+        if (leftButton.hasClickJustStarted)
+            LeftClick();
 
-        currentMousePosition = Input.mousePosition;
-        
-        foreach (int _id in buttonIds) {
+        if (leftButton.isHeld)
+            UpdateSelectionBox();
 
-            button = buttons[_id];
-            _isClicked = Input.GetMouseButton(_id);
-
-            button.Update(_isClicked);
-        }
+        if (leftButton.hasClickJustEnded)
+            ApplySelectionBox();
     }
 
     private void LeftClick()
     {
+        RaycastHit hit;
+
+        hit = SendRaycase();
+        if (hit.collider != null)
+            Events.current.SingleSelection(hit.collider.gameObject);
+        else
+            Game.Manager.State.DeselectAll();
+    }
+
+    private RaycastHit SendRaycase()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Physics.Raycast(ray, out hit);
+
+        return hit;
+    }
+
+    private void SelectGameObject(GameObject target)
+    {
+        Events.current.SingleSelection(target);
     }
 
     private void UpdateSelectionBox()
@@ -118,8 +138,6 @@ public class Mouse : MonoBehaviour
         selectionBoxBounds.center = selectionBoxTransform.transform.position;
         selectionBoxBounds.size = new Vector3(width, height, 0);
 
-        //selectionBoxTransform.sizeDelta = new Vector2(width, height);
-        //selectionBoxTransform.anchoredPosition = leftButton.lastClickPosition + new Vector3(width / 2, height / 2, 0);
         selectionBoxTransform.position = Vector3.Lerp(leftButton.lastClickPosition, currentMousePosition, 0.5f);
         selectionBoxTransform.sizeDelta = selectionBoxCanvas.transform.InverseTransformVector(selectionBoxBounds.size);
     }
@@ -128,33 +146,6 @@ public class Mouse : MonoBehaviour
     {
         selectionBox.SetActive(false);
         onApplyMultiSelection();
-    }
-
-    //private void UpdateSelectionBoxCollider()
-    //{
-    //    float scaleX;
-    //    float scaleY;
-    //    float scaleZ;
-    //
-    //    selectionBoxCollider.transform.position = Camera.main.transform.position;
-    //    selectionBoxCollider.transform.rotation = Camera.main.transform.rotation;
-    //
-    //    Game.Manager.DebugConsole.Log(selectionBoxTransform.sizeDelta, "sizeDelta");
-    //    Game.Manager.DebugConsole.Log(Screen.width, "Screen.width");
-    //    scaleX = selectionBoxTransform.sizeDelta.x;
-    //    scaleY = selectionBoxTransform.sizeDelta.y;
-    //    scaleZ = 10;
-    //    selectionBoxCollider.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
-    //}
-
-    private Vector3 CalculateSelectionBoxSize()
-    {
-        Vector3 size;
-        size.x = Mathf.Abs(leftButton.lastClickPosition.x - currentMousePosition.x);
-        size.y = Mathf.Abs(leftButton.lastClickPosition.y - currentMousePosition.y);
-        size.z = 0;
-
-        return size;
     }
 
     private void HandleRightClick()

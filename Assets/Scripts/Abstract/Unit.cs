@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Unit : Entity
 {
-    private GameObject HealthBar;
 
     // Start is called before the first frame update
     protected new void Start()
     {
         base.Start();
-        HealthBar = transform.Find("HealthBar").gameObject;
-
-        GameEvents.current.entitySelectionTrigger += EntitySelectionCallback;
+        //GameEvents.current.entitySelectionTrigger += EntitySelectionCallback;
     }
 
     // Update is called once per frame
@@ -24,13 +21,13 @@ public class Unit : Entity
     public void Select()
     {
         isSelected = true;
-        HealthBar.SetActive(true);
+        //healthBar.SetActive(true);
     }
 
     public void Diselect()
     {
         isSelected = false;
-        HealthBar.SetActive(false);
+        //healthBar.SetActive(false);
     }
 
     private void EntitySelectionCallback(GameObject selectedObject)

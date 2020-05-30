@@ -10,8 +10,8 @@ public class Building : Entity
     // Start is called before the first frame update
     protected new void Start()
     {
-        GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
-        GameEvents.current.assignmentEndTrigger += EndAssignmentCallback;
+        //GameEvents.current.askAssignToBuildingTrigger += AskAssignToBuildingCallback;
+        //GameEvents.current.assignmentEndTrigger += EndAssignmentCallback;
         this.isBuilding = true;
     }
 
