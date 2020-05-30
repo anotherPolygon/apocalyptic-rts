@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +10,10 @@ public class Settler : Animated
 
     protected new void Start()
     {
-        healthBar = transform.Find(Constants.healthBarGameObjectName).gameObject;
-        Events.current.onSingleSelection += HandleSelection;
-
-        healthBar.SetActive(false);
         base.Start();
+
+        InitizalizeHealthBar();
+        InitizalizeEventListeners();
     }
 
     // Update is called once per frame
@@ -22,16 +22,44 @@ public class Settler : Animated
         base.Update();
     }
 
-    public void HandleSelection(GameObject selectedObject)
+    private void InitizalizeHealthBar()
     {
-        if (selectedObject == gameObject)
-            ApplySelection();
+        healthBar = transform.Find(Constants.healthBarGameObjectName).gameObject;
+        healthBar.SetActive(false);
+    }
+    private void InitizalizeEventListeners()
+    {
+        Events.current.OnSingleSelection += HandleSingleSelection;
+        Events.current.OnMultipleSelection += HandleMultipleSelection;
     }
 
-    public void ApplySelection()
+    public void HandleSingleSelection(GameObject selectedObject)
+    {
+        if (selectedObject == gameObject)
+            ApplySingleSelection();
+    }
+
+    public void ApplySingleSelection()
     {
         this.healthBar.SetActive(true);
-        Game.Manager.State.RegisterSelection(this);
+        Game.Manager.State.RegisterSingleSelection(this);
+    }
+
+    public void HandleMultipleSelection(Bounds box)
+    {
+        // this is not ideal. Mouse object should identify objects
+        // and call SingleSelection for each selected object individually.
+        // but for now this will have to do.
+        Vector3 _screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        _screenPosition.z = 0;
+        if (box.Contains(_screenPosition))
+            ApplyMultipleSelection();
+    }
+
+    private void ApplyMultipleSelection()
+    {
+        this.healthBar.SetActive(true);
+        Game.Manager.State.RegisterMultipleSelection(this);
     }
 
     public void ClearSelection()

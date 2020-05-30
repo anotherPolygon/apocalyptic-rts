@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 6383222216403907091}
   - component: {fileID: 6383222216403907116}
   - component: {fileID: 5683143137274676255}
+  - component: {fileID: 198367146634022614}
   m_Layer: 0
   m_Name: settler
   m_TagString: Untagged
@@ -328,6 +329,18 @@ MonoBehaviour:
   isSelected: 0
   id: 0
   healthBar: {fileID: 0}
+--- !u!114 &198367146634022614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6383222216403907088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c634b4aaadde0e14481e843e590e5f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6383222216506129840
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,10 +13,20 @@ public class Events : MonoBehaviour
         current = this;
     }
 
-    public event Action<GameObject> onSingleSelection;
+    public event Action<GameObject> OnSingleSelection;
     public void SingleSelection(GameObject target)
     {
-        if (onSingleSelection != null)
-            onSingleSelection(target);
+        if (OnSingleSelection != null)
+            OnSingleSelection(target);
     }
+
+    public event Action<Bounds> OnMultipleSelection;
+    public void MultipleSelection(Bounds box)
+    {
+        if (OnMultipleSelection != null)
+        {
+            OnMultipleSelection(box);
+        }
+    }
+
 }

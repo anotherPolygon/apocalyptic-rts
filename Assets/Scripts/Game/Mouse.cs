@@ -97,7 +97,7 @@ public class Mouse : MonoBehaviour
         if (leftButton.isHeld)
             UpdateSelectionBox();
 
-        if (leftButton.hasClickJustEnded)
+        if (leftButton.hasClickJustEnded & leftButton.wasHeld)
             ApplySelectionBox();
     }
 
@@ -145,7 +145,8 @@ public class Mouse : MonoBehaviour
     private void ApplySelectionBox()
     {
         selectionBox.SetActive(false);
-        onApplyMultiSelection();
+        Events.current.MultipleSelection(selectionBoxBounds);
+        InitializeSelectionBox();
     }
 
     private void HandleRightClick()

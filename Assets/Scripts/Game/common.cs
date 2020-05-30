@@ -10,6 +10,7 @@ namespace common
         int id;
         public bool isClicked;
         public bool isHeld;
+        public bool wasHeld;
         public float clickDuration;
         public bool hasClickJustStarted;
         public bool hasClickJustEnded;
@@ -20,6 +21,7 @@ namespace common
             id = buttonId;
             isClicked = false;
             isHeld = false;
+            wasHeld = false;
             clickDuration = 0f;
             hasClickJustEnded = false;
             hasClickJustStarted = false;
@@ -27,9 +29,9 @@ namespace common
 
         public void Update(bool isClicked)
         {
-
             this.hasClickJustStarted = !this.isClicked & isClicked;
             this.hasClickJustEnded = this.isClicked & !isClicked;
+            this.wasHeld = !isClicked & this.isHeld;
 
             if (this.isClicked)
                 this.clickDuration += Time.deltaTime;

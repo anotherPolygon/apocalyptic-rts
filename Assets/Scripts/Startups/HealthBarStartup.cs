@@ -7,13 +7,7 @@ public class HealthBarStartup : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        
-        
+        gameObject.name = Constants.healthBarGameObjectName;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        gameObject.transform.name = "David" + gameObject.GetInstanceID().ToString();// Constants.healthBarGameObjectName;
-    }
 }

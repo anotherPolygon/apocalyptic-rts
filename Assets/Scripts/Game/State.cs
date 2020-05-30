@@ -8,28 +8,31 @@ public class State : MonoBehaviour
     public bool inAdditiveSelection = false;
     public Dictionary<int, Settler> selectedSettlers = new Dictionary<int, Settler>();
 
-
     public void Update()
     {
-        GetInput();
-        HandleInput();
+        HandleState();
     }
 
-    private void GetInput()
+    private void HandleState()
     {
         inAdditiveSelection = Input.GetKey(KeyCode.LeftShift);
     }
 
-    private void HandleInput()
+    private void AddToSelection(Settler settler)
     {
-        
+        selectedSettlers.Add(settler.UnityObjects.gameObject.GetInstanceID(), settler);
     }
 
-    public void RegisterSelection(Settler settler)
+    public void RegisterSingleSelection(Settler settler)
     {
         if (!inAdditiveSelection)
             DeselectAll();
-        selectedSettlers.Add(settler.UnityObjects.gameObject.GetInstanceID(), settler);
+        AddToSelection(settler);
+    }
+
+    public void RegisterMultipleSelection(Settler settler)
+    {
+        AddToSelection(settler);
     }
 
     public void DeselectAll()
@@ -42,4 +45,15 @@ public class State : MonoBehaviour
         }
         selectedSettlers.Clear();
     }
+
+    public override string ToString()
+    {
+        string result = "";
+        result += "selectedSettlers: (";
+        result += selectedSettlers.Count.ToString();
+        result += ") - ";
+        result += selectedSettlers.Keys.ToString();
+        return result;
+    }
+
 }
