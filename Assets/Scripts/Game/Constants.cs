@@ -8,6 +8,7 @@ public class Constants
     public const string settlerMeshName = "settlerMesh";
 
     public const string selectionBoxGameObjectName = "selectionBox";
+    public const string selectionBoxImageName = "image";
     public const string selectionBoxColliderGameObjectName = "selectionBoxCollider";
     public const float selectionBoxPivot = 0.5f;
     public const float selectionBoxMinimumAnchor = 0.5f;

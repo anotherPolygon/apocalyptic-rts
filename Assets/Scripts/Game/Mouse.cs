@@ -8,12 +8,8 @@ public class Mouse : MonoBehaviour
 {
     private GameObject raycastCollidedObject;
 
-    public GameObject selectionBox;
-    public GameObject selectionBoxCollider;
-    public Image selectionBoxImage;
-    public RectTransform selectionBoxTransform;
-    public Vector3 startScreenPos;
-    public Canvas selectionBoxCanvas;
+    public common.objects.UnityObjects selectionBox;
+
     public Bounds selectionBoxBounds = new Bounds();
 
     readonly List<int> buttonIds = new List<int>(new int[] {
@@ -31,14 +27,10 @@ public class Mouse : MonoBehaviour
 
     void Start()
     {
-        selectionBox = transform.Find(Constants.selectionBoxGameObjectName).gameObject;
-        selectionBoxCanvas = selectionBox.GetComponent<Canvas>();
-
-        selectionBoxImage = selectionBox.transform.Find("selectionBoxImage").GetComponent<Image>();
-        selectionBoxTransform = selectionBoxImage.GetComponent<RectTransform>();
-
-        selectionBoxCollider = transform.Find(Constants.selectionBoxColliderGameObjectName).gameObject;
-
+        GameObject _selectionBoxGameObject;
+        _selectionBoxGameObject = transform.Find(Constants.selectionBoxGameObjectName).gameObject;
+        selectionBox = new common.objects.UnityObjects(_selectionBoxGameObject);
+        
         InitializeMouseButtons();
         InitializeSelectionBox();
     }
@@ -84,10 +76,13 @@ public class Mouse : MonoBehaviour
 
     private void InitializeSelectionBox()
     {
-        selectionBoxTransform.pivot = Vector2.one * Constants.selectionBoxPivot;
-        selectionBoxTransform.anchorMin = Vector2.one * Constants.selectionBoxMinimumAnchor;
-        selectionBoxTransform.anchorMin = Vector2.one * Constants.selectionBoxMaximumAnchor;
-        selectionBox.SetActive(false);
+        RectTransform _rectTransform;
+        _rectTransform = selectionBox.childs[Constants.selectionBoxImageName].rectTransform;
+
+        _rectTransform.pivot = Vector2.one * Constants.selectionBoxPivot;
+        _rectTransform.anchorMin = Vector2.one * Constants.selectionBoxMinimumAnchor;
+        _rectTransform.anchorMin = Vector2.one * Constants.selectionBoxMaximumAnchor;
+        selectionBox.gameObject.SetActive(false);
     }
 
     private void HandleLeftClick()
@@ -127,23 +122,26 @@ public class Mouse : MonoBehaviour
 
     private void UpdateSelectionBox()
     {
+        RectTransform _rectTransform;
         float width;
         float height;
 
-        selectionBox.SetActive(true);
+        _rectTransform = selectionBox.childs[Constants.selectionBoxImageName].rectTransform;
+
+        selectionBox.gameObject.SetActive(true);
         width = Mathf.Abs(currentMousePosition.x - leftButton.lastClickPosition.x);
         height = Mathf.Abs(currentMousePosition.y - leftButton.lastClickPosition.y);
 
-        selectionBoxBounds.center = selectionBoxTransform.transform.position;
+        selectionBoxBounds.center = _rectTransform.transform.position;
         selectionBoxBounds.size = new Vector3(width, height, 0);
 
-        selectionBoxTransform.position = Vector3.Lerp(leftButton.lastClickPosition, currentMousePosition, 0.5f);
-        selectionBoxTransform.sizeDelta = selectionBoxCanvas.transform.InverseTransformVector(selectionBoxBounds.size);
+        _rectTransform.position = Vector3.Lerp(leftButton.lastClickPosition, currentMousePosition, 0.5f);
+        _rectTransform.sizeDelta = selectionBox.canvas.transform.InverseTransformVector(selectionBoxBounds.size);
     }
 
     private void ApplySelectionBox()
     {
-        selectionBox.SetActive(false);
+        selectionBox.gameObject.SetActive(false);
         Events.current.MultipleSelection(selectionBoxBounds);
         InitializeSelectionBox();
     }

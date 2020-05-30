@@ -1771,12 +1771,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853d25d0f98fe574a9687c7a0a510916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionBox: {fileID: 0}
-  selectionBoxCollider: {fileID: 0}
-  selectionBoxImage: {fileID: 0}
-  selectionBoxTransform: {fileID: 0}
-  startScreenPos: {x: 0, y: 0, z: 0}
-  selectionBoxCanvas: {fileID: 0}
   selectionBoxBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -2493,6 +2487,7 @@ GameObject:
   - component: {fileID: 1652412534}
   - component: {fileID: 1652412536}
   - component: {fileID: 1652412535}
+  - component: {fileID: 1652412537}
   m_Layer: 5
   m_Name: selectionBoxImage
   m_TagString: Untagged
@@ -2554,6 +2549,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1652412533}
   m_CullTransparentMesh: 0
+--- !u!114 &1652412537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652412533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470efb1ff65442f4fb62a1a0ce1c87cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1860137841
 GameObject:
   m_ObjectHideFlags: 0

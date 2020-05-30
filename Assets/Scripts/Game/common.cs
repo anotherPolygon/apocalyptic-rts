@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 namespace common
 {
@@ -93,6 +94,9 @@ namespace common
 
             public readonly Transform transform;
             public readonly Renderer renderer;
+            public readonly Image image;
+            public readonly Canvas canvas;
+            public readonly RectTransform rectTransform;
             public readonly NavMeshAgent navMeshAgent;
 
             public readonly Dictionary<string, UnityObjects> childs = new Dictionary<string, UnityObjects>();
@@ -102,6 +106,9 @@ namespace common
                 gameObject = givenGameObject;
                 transform = givenGameObject.transform;
                 renderer = givenGameObject.GetComponent<Renderer>();
+                image = givenGameObject.GetComponent<Image>();
+                canvas = givenGameObject.GetComponent<Canvas>();
+                rectTransform = givenGameObject.GetComponent<RectTransform>();
                 navMeshAgent = givenGameObject.GetComponent<NavMeshAgent>();
 
                 InitializeChildUnityObjects();
@@ -109,11 +116,11 @@ namespace common
 
             private void InitializeChildUnityObjects()
             {
-                UnityObjects childUnityObjects;
+                UnityObjects _childUnityObjects;
                 foreach (Transform child in transform)
                 {
-                    childUnityObjects = new UnityObjects(child.gameObject);
-                    childs.Add(child.name, childUnityObjects);
+                    _childUnityObjects = new UnityObjects(child.gameObject);
+                    childs.Add(child.name, _childUnityObjects);
                 }
             }
         }
