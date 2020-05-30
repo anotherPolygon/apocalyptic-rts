@@ -104,21 +104,18 @@ public class Mouse : MonoBehaviour
     private void LeftClick()
     {
         RaycastHit hit;
+        SendRaycast(out hit);
 
-        hit = SendRaycast();
         if (hit.collider != null)
             Events.current.SingleSelection(hit.collider.gameObject);
         else
             Game.Manager.State.DeselectAll();
     }
 
-    private RaycastHit SendRaycast()
+    private bool SendRaycast(out RaycastHit hit)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        Physics.Raycast(ray, out hit);
-
-        return hit;
+        return Physics.Raycast(ray, out hit);
     }
 
     private void SelectGameObject(GameObject target)

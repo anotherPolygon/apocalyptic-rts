@@ -29,4 +29,13 @@ public class Events : MonoBehaviour
         }
     }
 
+    public event Action<RaycastHit> OnRequestAction;
+    public void RequestAction(RaycastHit hit)
+    {
+        if (OnRequestAction != null)
+        {
+            OnRequestAction(hit);
+        }
+    }
+
 }

@@ -16,6 +16,8 @@ public class Constants
     public const int mouseRightButtonId = 1;
     public const int mouseMiddleButtonId = 2;
     public const float mouseLongestClick = 0.25f;
+    public const float mouseDragThreshold = 5f;
+
 
     public const int maxSelectedSettlers = 12;
 }

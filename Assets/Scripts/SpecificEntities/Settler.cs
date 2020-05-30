@@ -47,9 +47,9 @@ public class Settler : Animated
 
     public void HandleMultipleSelection(Bounds box)
     {
-        // this is not ideal. Mouse object should identify objects in the box
-        // and call SingleSelection for each selected object individually.
-        // but for now this will have to do.
+        // TODO: this is not ideal. Mouse object should identify objects in the box
+        //       and call SingleSelection for each selected object individually.
+        //       but for now this will have to do.
         Vector3 _screenPosition = Camera.main.WorldToScreenPoint(transform.position);
         _screenPosition.z = 0;
         if (box.Contains(_screenPosition))

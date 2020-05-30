@@ -14,7 +14,8 @@ namespace common
         public float clickDuration;
         public bool hasClickJustStarted;
         public bool hasClickJustEnded;
-        public Vector3 lastClickPosition = new Vector3(0f, 0f);
+        public float dragDistance;
+        public Vector3 lastClickPosition = new Vector3(0f, 0f, 0f);
 
         public MouseButton(int buttonId)
         {
@@ -25,6 +26,7 @@ namespace common
             clickDuration = 0f;
             hasClickJustEnded = false;
             hasClickJustStarted = false;
+            dragDistance = 0f;
         }
 
         public void Update(bool isClicked)
@@ -38,12 +40,31 @@ namespace common
             else
                 this.clickDuration = 0;
 
-            this.isHeld = this.clickDuration > Constants.mouseLongestClick;
-
             if (this.hasClickJustStarted)
                 this.lastClickPosition = Input.mousePosition;
 
             this.isClicked = isClicked;
+
+            this.isHeld = this.clickDuration > Constants.mouseLongestClick;
+            this.isHeld |= CheckIfDraging();
+            
+        }
+
+        private bool CheckIfDraging()
+        {
+            bool _hasMouseMoved;
+
+            // TODO: this should be changed because all members of MouseButton should
+            //       be set in Update function.
+            dragDistance = CalculateDragDistance(this.lastClickPosition);
+            _hasMouseMoved = dragDistance > Constants.mouseDragThreshold;
+
+            return _hasMouseMoved & this.isClicked;
+        }
+
+        private float CalculateDragDistance(Vector3 from)
+        {
+            return Vector2.Distance(from, Input.mousePosition);
         }
 
         public override string ToString()
