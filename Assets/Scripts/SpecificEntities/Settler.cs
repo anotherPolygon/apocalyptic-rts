@@ -70,14 +70,14 @@ public class Settler : Animated
     public void HandleSingleSelection(GameObject selectedObject)
     {
         if (selectedObject == gameObject)
-            ApplySingleSelection();
+            ApplySelection();
     }
 
-    public void ApplySingleSelection()
+    public void ApplySelection(bool isFromMultipleSelection=false)
     {
         this.isSelected = true;
         this.healthBar.SetActive(true);
-        Game.Manager.State.RegisterSingleSelection(this);
+        Game.Manager.State.RegisterSingleSelection(this, isFromMultipleSelection);
 
         RegisterForSelectedStateEvents();
     }
@@ -99,7 +99,7 @@ public class Settler : Animated
         _screenPosition.z = 0;
         if (box.Contains(_screenPosition))
         {
-            ApplyMultipleSelection();
+            ApplySelection(true);
         }
     }
 

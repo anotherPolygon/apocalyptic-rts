@@ -23,9 +23,9 @@ public class State : MonoBehaviour
         selectedSettlers.Add(settler.UnityObjects.gameObject.GetInstanceID(), settler);
     }
 
-    public void RegisterSingleSelection(Settler settler)
+    public void RegisterSingleSelection(Settler settler, bool isFromMultipleSelection)
     {
-        if (!inAdditiveSelection)
+        if (!inAdditiveSelection & !isFromMultipleSelection)
             DeselectAll();
         AddToSelection(settler);
     }
