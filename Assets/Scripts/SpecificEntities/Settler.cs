@@ -12,8 +12,14 @@ public class Settler : Animated
     {
         base.Start();
 
+        InitizalizeState();
         InitizalizeHealthBar();
         InitizalizeEventListeners();
+    }
+
+    private void InitizalizeState()
+    {
+        this.isSelected = false;
     }
 
     // Update is called once per frame
@@ -33,6 +39,16 @@ public class Settler : Animated
         Events.current.OnMultipleSelection += HandleMultipleSelection;
     }
 
+    private void RegisterForSelectedStateEvents()
+    {
+        Events.current.OnRequestAction += HandleGeneralAction;
+    }
+
+    private void UnregisterFromSelectedStateEvents()
+    {
+        Events.current.OnRequestAction -= HandleGeneralAction;
+    }
+
     public void HandleSingleSelection(GameObject selectedObject)
     {
         if (selectedObject == gameObject)
@@ -41,8 +57,19 @@ public class Settler : Animated
 
     public void ApplySingleSelection()
     {
+        this.isSelected = true;
         this.healthBar.SetActive(true);
         Game.Manager.State.RegisterSingleSelection(this);
+
+        RegisterForSelectedStateEvents();
+    }
+
+    public void ClearSelection()
+    {
+        this.isSelected = false;
+        this.healthBar.SetActive(false);
+
+        UnregisterFromSelectedStateEvents();
     }
 
     public void HandleMultipleSelection(Bounds box)
@@ -64,8 +91,32 @@ public class Settler : Animated
         Game.Manager.State.RegisterMultipleSelection(this);
     }
 
-    public void ClearSelection()
+    private void HandleGeneralAction(RaycastHit hit)
     {
-        this.healthBar.SetActive(false);
+        Entity otherEntity;
+        otherEntity = Game.Manager.GameObject2Entity(hit.collider.gameObject);
+
+        if (otherEntity is null)
+        {
+            if (common.Utils.IsTerrain(hit.collider.gameObject))
+                MoveTo(hit.point);
+        }
+        else
+            InteractWithOtherEntity(otherEntity);
+
     }
+
+    private void MoveTo(Vector3 point)
+    {
+        //UActions.MoveToPostion(agent, point, positionSpace);
+        //agent.destination = position + new Vector3(positionSpace, 0, positionSpace);
+        //
+        this.UnityObjects.navMeshAgent.destination = point;
+    }
+
+    private void InteractWithOtherEntity(Entity otherEntity)
+    {
+        throw new NotImplementedException();
+    }
+
 }

@@ -51,4 +51,12 @@ public class Game : MonoBehaviour
         return id2entity[id].isPlayer;
     }
 
+    public Entity GameObject2Entity(GameObject gameObjectGiven)
+    {
+        Entity foundEntity = null;
+        id2entity.TryGetValue(gameObjectGiven.GetInstanceID(), out foundEntity);
+
+        return foundEntity;
+    }
+
 }

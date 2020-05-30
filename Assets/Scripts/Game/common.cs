@@ -1,96 +1,113 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace common
 {
-    // class for mouse button information
-    public class MouseButton
+    namespace objects
     {
-        int id;
-        public bool isClicked;
-        public bool isHeld;
-        public bool wasHeld;
-        public float clickDuration;
-        public bool hasClickJustStarted;
-        public bool hasClickJustEnded;
-        public float dragDistance;
-        public Vector3 lastClickPosition = new Vector3(0f, 0f, 0f);
-
-        public MouseButton(int buttonId)
+        // class for mouse button information
+        public class MouseButton
         {
-            id = buttonId;
-            isClicked = false;
-            isHeld = false;
-            wasHeld = false;
-            clickDuration = 0f;
-            hasClickJustEnded = false;
-            hasClickJustStarted = false;
-            dragDistance = 0f;
-        }
+            int id;
+            public bool isClicked;
+            public bool isHeld;
+            public bool wasHeld;
+            public float clickDuration;
+            public bool hasClickJustStarted;
+            public bool hasClickJustEnded;
+            public float dragDistance;
+            public Vector3 lastClickPosition = new Vector3(0f, 0f, 0f);
 
-        public void Update(bool isClicked)
-        {
-            this.hasClickJustStarted = !this.isClicked & isClicked;
-            this.hasClickJustEnded = this.isClicked & !isClicked;
-            this.wasHeld = !isClicked & this.isHeld;
-
-            if (this.isClicked)
-                this.clickDuration += Time.deltaTime;
-            else
-                this.clickDuration = 0;
-
-            if (this.hasClickJustStarted)
-                this.lastClickPosition = Input.mousePosition;
-
-            this.isClicked = isClicked;
-
-            this.isHeld = this.clickDuration > Constants.mouseLongestClick;
-            this.isHeld |= CheckIfDraging();
-            
-        }
-
-        private bool CheckIfDraging()
-        {
-            bool _hasMouseMoved;
-
-            // TODO: this should be changed because all members of MouseButton should
-            //       be set in Update function.
-            dragDistance = CalculateDragDistance(this.lastClickPosition);
-            _hasMouseMoved = dragDistance > Constants.mouseDragThreshold;
-
-            return _hasMouseMoved & this.isClicked;
-        }
-
-        private float CalculateDragDistance(Vector3 from)
-        {
-            return Vector2.Distance(from, Input.mousePosition);
-        }
-
-        public override string ToString()
-        {
-            string result = "";
-            if (isClicked)
-                result += "isClicked";
-            if (isHeld)
+            public MouseButton(int buttonId)
             {
-                result += " - isHeld - ";
-                result += this.lastClickPosition.ToString();
+                id = buttonId;
+                isClicked = false;
+                isHeld = false;
+                wasHeld = false;
+                clickDuration = 0f;
+                hasClickJustEnded = false;
+                hasClickJustStarted = false;
+                dragDistance = 0f;
             }
 
-            return result;
+            public void Update(bool isClicked)
+            {
+                this.hasClickJustStarted = !this.isClicked & isClicked;
+                this.hasClickJustEnded = this.isClicked & !isClicked;
+                this.wasHeld = !isClicked & this.isHeld;
+
+                if (this.isClicked)
+                    this.clickDuration += Time.deltaTime;
+                else
+                    this.clickDuration = 0;
+
+                if (this.hasClickJustStarted)
+                    this.lastClickPosition = Input.mousePosition;
+
+                this.isClicked = isClicked;
+
+                this.isHeld = this.clickDuration > Constants.mouseLongestClick;
+                this.isHeld |= CheckIfDraging();
+
+            }
+
+            private bool CheckIfDraging()
+            {
+                bool _hasMouseMoved;
+
+                // TODO: this should be changed because all members of MouseButton should
+                //       be set in Update function.
+                dragDistance = CalculateDragDistance(this.lastClickPosition);
+                _hasMouseMoved = dragDistance > Constants.mouseDragThreshold;
+
+                return _hasMouseMoved & this.isClicked;
+            }
+
+            private float CalculateDragDistance(Vector3 from)
+            {
+                return Vector2.Distance(from, Input.mousePosition);
+            }
+
+            public override string ToString()
+            {
+                string result = "";
+                if (isClicked)
+                    result += "isClicked";
+                if (isHeld)
+                {
+                    result += " - isHeld - ";
+                    result += this.lastClickPosition.ToString();
+                }
+
+                return result;
+            }
         }
 
-    }
-    
-    // class of unity objects for Entity to hold
-    public class UnityObjects
-    {
-        public readonly GameObject gameObject;
-        public UnityObjects(GameObject givenGameObject)
+        // class of unity objects for Entity to hold
+        public class UnityObjects
         {
-            gameObject = givenGameObject;
+            public readonly GameObject gameObject;
+
+            public readonly Transform transform;
+            public readonly Renderer renderer;
+            public readonly NavMeshAgent navMeshAgent;
+
+            public UnityObjects(GameObject givenGameObject)
+            {
+                gameObject = givenGameObject;
+                transform = givenGameObject.transform;
+                renderer = givenGameObject.GetComponent<Renderer>();
+                navMeshAgent = givenGameObject.GetComponent<NavMeshAgent>();
+            }
         }
     }
-    
+    public class Utils
+    {
+        public static bool IsTerrain(GameObject gameObjectGiven)
+        {
+            return gameObjectGiven.tag == Constants.terrainGameObjectTag;
+        }
+    }
 }

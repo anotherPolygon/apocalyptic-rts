@@ -18,6 +18,7 @@ public class Constants
     public const float mouseLongestClick = 0.25f;
     public const float mouseDragThreshold = 5f;
 
-
     public const int maxSelectedSettlers = 12;
+
+    public const string terrainGameObjectTag = "Terrain";
 }

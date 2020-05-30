@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class Mouse : MonoBehaviour
 {
@@ -23,10 +24,10 @@ public class Mouse : MonoBehaviour
 
     Vector3 currentMousePosition;
 
-    private common.MouseButton[] buttons = new common.MouseButton[] { null, null, null };
-    private common.MouseButton leftButton;
-    private common.MouseButton rightButton;
-    private common.MouseButton middleButton;
+    private common.objects.MouseButton[] buttons = new common.objects.MouseButton[] { null, null, null };
+    private common.objects.MouseButton leftButton;
+    private common.objects.MouseButton rightButton;
+    private common.objects.MouseButton middleButton;
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class Mouse : MonoBehaviour
     private void GetInput()
     {
         bool _isClicked;
-        common.MouseButton button;
+        common.objects.MouseButton button;
 
         currentMousePosition = Input.mousePosition;
         
@@ -74,7 +75,7 @@ public class Mouse : MonoBehaviour
     private void InitializeMouseButtons()
     {
         foreach (int id in buttonIds)
-            buttons[id] = new common.MouseButton(id);
+            buttons[id] = new common.objects.MouseButton(id);
 
         leftButton = buttons[Constants.mouseLeftButtonId];
         rightButton = buttons[Constants.mouseRightButtonId];
@@ -107,9 +108,10 @@ public class Mouse : MonoBehaviour
         SendRaycast(out hit);
 
         if (hit.collider != null)
-            Events.current.SingleSelection(hit.collider.gameObject);
-        else
-            Game.Manager.State.DeselectAll();
+            if (hit.collider.gameObject.tag == Constants.terrainGameObjectTag)
+                Game.Manager.State.DeselectAll();
+            else
+                Events.current.SingleSelection(hit.collider.gameObject);
     }
 
     private bool SendRaycast(out RaycastHit hit)
@@ -143,13 +145,22 @@ public class Mouse : MonoBehaviour
     {
         selectionBox.SetActive(false);
         Events.current.MultipleSelection(selectionBoxBounds);
-        Game.Manager.DebugConsole.Log(selectionBoxBounds, "selectionBoxBounds");
         InitializeSelectionBox();
     }
 
     private void HandleRightClick()
     {
+        if (rightButton.hasClickJustStarted)
+            RightClick();
+    }
 
+    private void RightClick()
+    {
+        RaycastHit hit;
+        SendRaycast(out hit);
+
+        if (hit.collider != null)
+            Events.current.RequestAction(hit);
     }
 
     private void HandleMiddleClick()
@@ -157,7 +168,7 @@ public class Mouse : MonoBehaviour
 
     }
 
-    private common.MouseButton GetButton(int id)
+    private common.objects.MouseButton GetButton(int id)
     {
         return buttons[id];
     }
