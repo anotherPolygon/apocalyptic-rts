@@ -7,6 +7,7 @@ namespace common
     // class for mouse button information
     public class MouseButton
     {
+        int id;
         public bool isClicked;
         public bool isHeld;
         public float clickDuration;
@@ -14,8 +15,9 @@ namespace common
         public bool hasClickJustEnded;
         public Vector3 lastClickPosition = new Vector3(0f, 0f);
 
-        public MouseButton()
+        public MouseButton(int buttonId)
         {
+            id = buttonId;
             isClicked = false;
             isHeld = false;
             clickDuration = 0f;
