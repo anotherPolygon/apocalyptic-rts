@@ -7,7 +7,7 @@ public class Settler : Animated
 {
     public GameObject healthBar;
     private Color originalColor;
-    private Building workPlace;
+    private WorkBuilding workPlace;
     // Start is called before the first frame update
 
     protected new void Start()
@@ -116,7 +116,7 @@ public class Settler : Animated
         if (otherEntity is null)
         {
             if (common.Utils.IsTerrain(hit.collider.gameObject))
-                MoveTo(hit.point);
+                HandleMoveCommand(hit.point);
         }
         else
         {
@@ -124,6 +124,19 @@ public class Settler : Animated
             InteractWithOtherEntity(otherEntity);
         }
 
+    }
+
+    private void HandleMoveCommand(Vector3 point)
+    {
+        QuitWork();
+        MoveTo(point);
+    }
+
+    private void QuitWork()
+    {
+        if (workPlace != null)
+            workPlace.FireWorker(this);
+        workPlace = null;
     }
 
     private void MoveTo(Vector3 point)
@@ -136,13 +149,14 @@ public class Settler : Animated
         otherEntity.PromptForInteraction(this);
     }
 
-    internal void StartWorking(Building building)
+    internal void StartWorking(WorkBuilding building)
     {
+        QuitWork();
         workPlace = building;
         MoveTo(building.UnityObjects.transform.position);
     }
 
-    private void AssignToWork(Building building)
+    private void AssignToWork(WorkBuilding building)
     {
         ChangeMeshColor(building.UnityObjects.renderer.material.color);
     }

@@ -22,4 +22,9 @@ public class WorkBuilding : Building
         workers.Add(settler.id, settler);
         settler.StartWorking(this);
     }
+
+    internal void FireWorker(Settler settler)
+    {
+        workers.Remove(settler.id);
+    }
 }
