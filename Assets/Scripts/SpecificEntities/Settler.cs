@@ -51,6 +51,7 @@ public class Settler : Animated
         healthBar = transform.Find(Constants.healthBarGameObjectName).gameObject;
         healthBar.SetActive(false);
     }
+
     private void InitizalizeEventListeners()
     {
         Events.current.OnSingleSelection += HandleSingleSelection;
@@ -146,7 +147,7 @@ public class Settler : Animated
 
     private void InteractWithOtherEntity(Entity otherEntity)
     {
-        otherEntity.PromptForInteraction(this);
+        otherEntity.InteractWithSettler(this);
     }
 
     internal void StartWorking(WorkBuilding building)

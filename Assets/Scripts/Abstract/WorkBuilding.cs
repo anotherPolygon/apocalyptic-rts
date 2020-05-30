@@ -17,7 +17,7 @@ public class WorkBuilding : Building
         base.Update();
     }
 
-    override internal void PromptForInteraction(Settler settler)
+    override internal void InteractWithSettler(Settler settler)
     {
         workers.Add(settler.id, settler);
         settler.StartWorking(this);

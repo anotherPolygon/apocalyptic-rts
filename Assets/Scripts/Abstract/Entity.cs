@@ -34,8 +34,8 @@ public class Entity : MonoBehaviour
 
     }
 
-    virtual internal void PromptForInteraction(Settler settler)
+    virtual internal void InteractWithSettler(Settler settler)
     {
-        Debug.Log("Here!!");
+        throw new NotImplementedException();
     }
 }
