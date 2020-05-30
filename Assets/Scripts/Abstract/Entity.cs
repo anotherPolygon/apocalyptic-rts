@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,5 +34,8 @@ public class Entity : MonoBehaviour
 
     }
 
-
+    virtual internal void PromptForInteraction(Settler settler)
+    {
+        Debug.Log("Here!!");
+    }
 }

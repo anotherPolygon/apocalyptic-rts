@@ -7,6 +7,7 @@ public class Settler : Animated
 {
     public GameObject healthBar;
     private Color originalColor;
+    private Building workPlace;
     // Start is called before the first frame update
 
     protected new void Start()
@@ -28,6 +29,21 @@ public class Settler : Animated
     protected new void Update()
     {
         base.Update();
+        Game.Manager.DebugConsole.Log(workPlace, "workPlace");
+        HandleState();
+    }
+
+    private void HandleState()
+    {
+        HandleWorkStuff();
+    }
+
+    private void HandleWorkStuff()
+    {
+        if (workPlace is null)
+            ChangeMeshColor(originalColor);
+        else
+            ChangeMeshColor(workPlace.UnityObjects.renderer.material.color);
     }
 
     private void InitizalizeHealthBar()
@@ -97,28 +113,46 @@ public class Settler : Animated
     {
         Entity otherEntity;
         otherEntity = Game.Manager.GameObject2Entity(hit.collider.gameObject);
-
         if (otherEntity is null)
         {
             if (common.Utils.IsTerrain(hit.collider.gameObject))
                 MoveTo(hit.point);
         }
         else
+        {
+            Game.Manager.DebugConsole.Log(otherEntity.UnityObjects.gameObject.name, "clicked on");
             InteractWithOtherEntity(otherEntity);
+        }
 
     }
 
     private void MoveTo(Vector3 point)
     {
-        //UActions.MoveToPostion(agent, point, positionSpace);
-        //agent.destination = position + new Vector3(positionSpace, 0, positionSpace);
-        //
         this.UnityObjects.navMeshAgent.destination = point;
     }
 
     private void InteractWithOtherEntity(Entity otherEntity)
     {
-        throw new NotImplementedException();
+        otherEntity.PromptForInteraction(this);
     }
 
+    internal void StartWorking(Building building)
+    {
+        workPlace = building;
+        MoveTo(building.UnityObjects.transform.position);
+    }
+
+    private void AssignToWork(Building building)
+    {
+        ChangeMeshColor(building.UnityObjects.renderer.material.color);
+    }
+
+    private void ChangeMeshColor(Color color)
+    {
+        Color _current;
+        Color _new;
+        _current = this.UnityObjects.childs[Constants.settlerMeshName].renderer.material.color;
+        _new = Color.Lerp(_current, color, 0.1f);
+        this.UnityObjects.childs[Constants.settlerMeshName].renderer.material.color = _new;
+    }
 }

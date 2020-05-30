@@ -11,7 +11,7 @@ namespace common
         // class for mouse button information
         public class MouseButton
         {
-            int id;
+            readonly int id;
             public bool isClicked;
             public bool isHeld;
             public bool wasHeld;

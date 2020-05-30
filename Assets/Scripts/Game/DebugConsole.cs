@@ -27,8 +27,14 @@ public class DebugConsole : MonoBehaviour
     {
         Text _text;
         GameObject _gameObject;
+        string messageString;
         string prefixString = prefix.ToString();
 
+        if (message is null)
+            messageString = "null";
+        else
+            messageString = message.ToString();
+            
         if (!console.ContainsKey(prefixString))
         {
             _gameObject = Instantiate(m_last_text_box);
@@ -41,6 +47,6 @@ public class DebugConsole : MonoBehaviour
             m_last_text_box = _gameObject;
         }
         _text = console[prefixString].GetComponent<Text>();
-        _text.text = prefix + ": " + message.ToString();
+        _text.text = prefix + ": " + messageString;
     }
 }
