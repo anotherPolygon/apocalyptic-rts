@@ -105,14 +105,14 @@ public class Mouse : MonoBehaviour
     {
         RaycastHit hit;
 
-        hit = SendRaycase();
+        hit = SendRaycast();
         if (hit.collider != null)
             Events.current.SingleSelection(hit.collider.gameObject);
         else
             Game.Manager.State.DeselectAll();
     }
 
-    private RaycastHit SendRaycase()
+    private RaycastHit SendRaycast()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -146,6 +146,7 @@ public class Mouse : MonoBehaviour
     {
         selectionBox.SetActive(false);
         Events.current.MultipleSelection(selectionBoxBounds);
+        Game.Manager.DebugConsole.Log(selectionBoxBounds, "selectionBoxBounds");
         InitializeSelectionBox();
     }
 

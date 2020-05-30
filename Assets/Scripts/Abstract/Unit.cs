@@ -36,13 +36,11 @@ public class Unit : Entity
         {
             Select();
             ReportSelected(gameObject);
-            Game.Manager.DebugConsole.Log("Selected!", this.id);
             
         }
         else
         {
             Diselect();
-            Game.Manager.DebugConsole.Log("Diselected!", this.id);
         }
 
     }

@@ -16,6 +16,13 @@ public class DebugConsole : MonoBehaviour
         m_last_text_box = canvas.transform.GetChild(0).gameObject;
     }
 
+    public void Log(object message)
+    {
+        string _prefix = "";
+        _prefix += "Debug-";
+        _prefix += (console.Count+1).ToString();
+        Log(message, _prefix);
+    }
     public void Log(object message, object prefix)
     {
         Text _text;
