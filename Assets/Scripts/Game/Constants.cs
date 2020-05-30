@@ -5,6 +5,7 @@ using UnityEngine;
 public class Constants
 {
     public const string healthBarGameObjectName = "healthBar";
+    public const string settlerMeshName = "settlerMesh";
 
     public const string selectionBoxGameObjectName = "selectionBox";
     public const string selectionBoxColliderGameObjectName = "selectionBoxCollider";

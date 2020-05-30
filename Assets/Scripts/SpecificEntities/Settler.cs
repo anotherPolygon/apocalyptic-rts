@@ -6,6 +6,7 @@ using UnityEngine;
 public class Settler : Animated
 {
     public GameObject healthBar;
+    private Color originalColor;
     // Start is called before the first frame update
 
     protected new void Start()
@@ -20,6 +21,7 @@ public class Settler : Animated
     private void InitizalizeState()
     {
         this.isSelected = false;
+        this.originalColor = this.UnityObjects.childs[Constants.settlerMeshName].renderer.material.color;
     }
 
     // Update is called once per frame

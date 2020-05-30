@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -94,12 +95,26 @@ namespace common
             public readonly Renderer renderer;
             public readonly NavMeshAgent navMeshAgent;
 
+            public readonly Dictionary<string, UnityObjects> childs = new Dictionary<string, UnityObjects>();
+
             public UnityObjects(GameObject givenGameObject)
             {
                 gameObject = givenGameObject;
                 transform = givenGameObject.transform;
                 renderer = givenGameObject.GetComponent<Renderer>();
                 navMeshAgent = givenGameObject.GetComponent<NavMeshAgent>();
+
+                InitializeChildUnityObjects();
+            }
+
+            private void InitializeChildUnityObjects()
+            {
+                UnityObjects childUnityObjects;
+                foreach (Transform child in transform)
+                {
+                    childUnityObjects = new UnityObjects(child.gameObject);
+                    childs.Add(child.name, childUnityObjects);
+                }
             }
         }
     }
