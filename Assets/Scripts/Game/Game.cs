@@ -6,7 +6,7 @@ public class Game : MonoBehaviour
 {
     // to define game as a singleton (so that class has reference to the only instance)
     public static Game Manager { get; private set; }
-
+    
     public DebugConsole DebugConsole;
     public CameraController CameraController;
     public Mouse Mouse;
@@ -40,7 +40,7 @@ public class Game : MonoBehaviour
 
     public int RegisterEntity(Entity entityToRegister)
     {
-        int id = entityToRegister.UnityObjects.gameObject.GetInstanceID();
+        int id = entityToRegister.unityObjects.gameObject.GetInstanceID();
         id2entity.Add(id, entityToRegister);
         entity2id.Add(entityToRegister, id);
         return id;

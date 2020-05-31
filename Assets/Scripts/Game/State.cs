@@ -20,7 +20,7 @@ public class State : MonoBehaviour
 
     private void AddToSelection(Settler settler)
     {
-        selectedSettlers.Add(settler.UnityObjects.gameObject.GetInstanceID(), settler);
+        selectedSettlers.Add(settler.unityObjects.gameObject.GetInstanceID(), settler);
     }
 
     public void RegisterSingleSelection(Settler settler, bool isFromMultipleSelection)

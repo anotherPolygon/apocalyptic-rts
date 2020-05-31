@@ -119,6 +119,9 @@ namespace common
                 UnityObjects _childUnityObjects;
                 foreach (Transform child in transform)
                 {
+                    if (child.name == gameObject.name)
+                        continue;
+
                     _childUnityObjects = new UnityObjects(child.gameObject);
                     childs.Add(child.name, _childUnityObjects);
                 }
@@ -130,6 +133,24 @@ namespace common
         public static bool IsTerrain(GameObject gameObjectGiven)
         {
             return gameObjectGiven.tag == Constants.terrainGameObjectTag;
+        }
+
+        public static string GetDictionaryKeysInfo<T>(Dictionary<string, T> dictionary)
+        {
+            string _result = "";
+            foreach (KeyValuePair<string, T> entry in dictionary)
+            {
+                _result += entry.Key.ToString() + "|";// + ": " + entry.Value.ToString() + "||";
+            }
+
+            return _result;
+        }
+
+        public static string GetUnityObjectChildsInfo(common.objects.UnityObjects unityObject)
+        {
+            string _result = "unityObject " + unityObject.gameObject.name + " childs: ";
+            _result += GetDictionaryKeysInfo<common.objects.UnityObjects>(unityObject.childs);
+            return _result;
         }
     }
 }

@@ -17,14 +17,14 @@ public class Entity : MonoBehaviour
     public bool isPlayer = false;
     public bool isSelected = false;
 
-    public common.objects.UnityObjects UnityObjects;
+    public common.objects.UnityObjects unityObjects;
 
     public int id;
 
     // Start is called before the first frame update
     protected void Start()
     {
-        UnityObjects = new common.objects.UnityObjects(gameObject);
+        unityObjects = new common.objects.UnityObjects(gameObject);
         id = Game.Manager.RegisterEntity(this);
     }
 

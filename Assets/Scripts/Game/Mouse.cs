@@ -20,10 +20,17 @@ public class Mouse : MonoBehaviour
 
     Vector3 currentMousePosition;
 
-    private common.objects.MouseButton[] buttons = new common.objects.MouseButton[] { null, null, null };
+    private common.objects.MouseButton[] buttons = new common.objects.MouseButton[] {
+        new common.objects.MouseButton(Constants.mouseLeftButtonId),
+        new common.objects.MouseButton(Constants.mouseRightButtonId),
+        new common.objects.MouseButton(Constants.mouseMiddleButtonId),
+    };
+
     private common.objects.MouseButton leftButton;
     private common.objects.MouseButton rightButton;
     private common.objects.MouseButton middleButton;
+
+    bool isInitialized = false;
 
     void Start()
     {
@@ -31,12 +38,17 @@ public class Mouse : MonoBehaviour
         _selectionBoxGameObject = transform.Find(Constants.selectionBoxGameObjectName).gameObject;
         selectionBox = new common.objects.UnityObjects(_selectionBoxGameObject);
         
-        InitializeMouseButtons();
         InitializeSelectionBox();
+        InitializeMouseButtons();
+
+        isInitialized = true;
     }
 
     void FixedUpdate()
     {
+        if (!isInitialized)
+            return;
+
         GetInput();
         HandleInput();
     }
@@ -66,9 +78,6 @@ public class Mouse : MonoBehaviour
 
     private void InitializeMouseButtons()
     {
-        foreach (int id in buttonIds)
-            buttons[id] = new common.objects.MouseButton(id);
-
         leftButton = buttons[Constants.mouseLeftButtonId];
         rightButton = buttons[Constants.mouseRightButtonId];
         middleButton = buttons[Constants.mouseMiddleButtonId];
@@ -77,8 +86,9 @@ public class Mouse : MonoBehaviour
     private void InitializeSelectionBox()
     {
         RectTransform _rectTransform;
+        Debug.Log(common.Utils.GetUnityObjectChildsInfo(selectionBox));
         _rectTransform = selectionBox.childs[Constants.selectionBoxImageName].rectTransform;
-
+        
         _rectTransform.pivot = Vector2.one * Constants.selectionBoxPivot;
         _rectTransform.anchorMin = Vector2.one * Constants.selectionBoxMinimumAnchor;
         _rectTransform.anchorMin = Vector2.one * Constants.selectionBoxMaximumAnchor;

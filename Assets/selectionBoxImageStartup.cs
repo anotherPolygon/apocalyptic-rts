@@ -5,7 +5,7 @@ using UnityEngine;
 public class selectionBoxImageStartup : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         gameObject.name = Constants.selectionBoxImageName;
     }

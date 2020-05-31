@@ -1701,9 +1701,7 @@ GameObject:
   - component: {fileID: 1209878667}
   - component: {fileID: 1209878668}
   - component: {fileID: 1209878666}
-  - component: {fileID: 1209878672}
   - component: {fileID: 1209878671}
-  - component: {fileID: 1209878670}
   - component: {fileID: 1209878669}
   - component: {fileID: 1209878673}
   - component: {fileID: 1209878674}
@@ -1774,24 +1772,6 @@ MonoBehaviour:
   selectionBoxBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
---- !u!114 &1209878670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209878665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d8773388332fbf4895834cbf529083d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panSpeed: 20
-  rotSpeed: 10
-  zoomSpeed: 50
-  borderWidth: 10
-  edgeScrolling: 1
-  cam: {fileID: 0}
 --- !u!114 &1209878671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1805,18 +1785,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JunkPilesContainers: []
---- !u!114 &1209878672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209878665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d68f8621db194104e9bd31c1fe9284d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1209878673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2119,6 +2087,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b03f934cccb237443872f56833b507b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTerrain: 0
+  isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
+  isBuilding: 0
+  isResource: 0
+  isPlayer: 0
+  isSelected: 0
+  id: 0
 --- !u!1 &1472875370
 GameObject:
   m_ObjectHideFlags: 0
