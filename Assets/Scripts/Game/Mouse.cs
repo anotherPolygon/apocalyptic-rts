@@ -164,11 +164,11 @@ public class Mouse : MonoBehaviour
 
     private void RightClick()
     {
-        RaycastHit hit;
-        SendRaycast(out hit);
+        RaycastHit _hit;
+        SendRaycast(out _hit);
 
-        if (hit.collider != null)
-            Events.current.RequestAction(hit);
+        if (_hit.collider != null)
+            Events.current.RequestAction(_hit);
     }
 
     private void HandleMiddleClick()

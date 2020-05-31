@@ -40,10 +40,10 @@ public class Game : MonoBehaviour
 
     public int RegisterEntity(Entity entityToRegister)
     {
-        int id = entityToRegister.unityObjects.gameObject.GetInstanceID();
-        id2entity.Add(id, entityToRegister);
-        entity2id.Add(entityToRegister, id);
-        return id;
+        int _id = entityToRegister.unityObjects.gameObject.GetInstanceID();
+        id2entity.Add(_id, entityToRegister);
+        entity2id.Add(entityToRegister, _id);
+        return _id;
     }
 
     public bool IsPlayer(int id)
@@ -53,10 +53,10 @@ public class Game : MonoBehaviour
 
     public Entity GameObject2Entity(GameObject gameObjectGiven)
     {
-        Entity foundEntity = null;
-        id2entity.TryGetValue(gameObjectGiven.GetInstanceID(), out foundEntity);
+        Entity _foundEntity = null;
+        id2entity.TryGetValue(gameObjectGiven.GetInstanceID(), out _foundEntity);
 
-        return foundEntity;
+        return _foundEntity;
     }
 
 }

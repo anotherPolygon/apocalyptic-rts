@@ -8,12 +8,11 @@ public class Settler : Animated
     public GameObject healthBar;
     private Color originalColor;
     private WorkBuilding workPlace;
-    // Start is called before the first frame update
 
     protected new void Start()
     {
         base.Start();
-
+        
         InitizalizeState();
         InitizalizeHealthBar();
         InitizalizeEventListeners();
@@ -29,7 +28,6 @@ public class Settler : Animated
     protected new void Update()
     {
         base.Update();
-        Game.Manager.DebugConsole.Log(workPlace, "workPlace");
         HandleState();
     }
 
@@ -112,16 +110,16 @@ public class Settler : Animated
 
     private void HandleGeneralAction(RaycastHit hit)
     {
-        Entity otherEntity;
-        otherEntity = Game.Manager.GameObject2Entity(hit.collider.gameObject);
-        if (otherEntity is null)
+        Entity _otherEntity;
+        _otherEntity = Game.Manager.GameObject2Entity(hit.collider.gameObject);
+        if (_otherEntity is null)
         {
             if (common.Utils.IsTerrain(hit.collider.gameObject))
                 HandleMoveCommand(hit.point);
         }
         else
         {
-            InteractWithOtherEntity(otherEntity);
+            InteractWithOtherEntity(_otherEntity);
         }
 
     }
@@ -167,6 +165,7 @@ public class Settler : Animated
         Color _new;
         _current = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
         _new = Color.Lerp(_current, color, 0.1f);
-        this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color = _new;
+        if (_new != _current)
+            this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color = _new;
     }
 }
