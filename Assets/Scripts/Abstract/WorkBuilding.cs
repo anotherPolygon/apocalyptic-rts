@@ -26,5 +26,7 @@ public class WorkBuilding : Building
     internal void FireWorker(Settler settler)
     {
         workers.Remove(settler.id);
-    }
+    } 
 }
+
+

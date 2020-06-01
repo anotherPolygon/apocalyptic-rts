@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Unit : Entity
 {
+    public bool isInCombat =  false;
+    public Entity targetOfAttack =  null;
 
     // Start is called before the first frame update
     protected new void Start()

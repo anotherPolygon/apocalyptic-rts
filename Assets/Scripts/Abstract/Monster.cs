@@ -5,14 +5,20 @@ using UnityEngine;
 public class Monster : Animated
 {
     // Start is called before the first frame update
-    protected new void Start()
+    new void Start()
     {
-        
+        base.Start();
     }
 
     // Update is called once per frame
-    protected new void Update()
+    new void Update()
     {
-        
+        base.Update();
+    }
+
+    internal override void InteractWithSettler(Settler settler)
+    {
+        this.attackers.Add(settler.id, settler);
+        settler.StartAttack(this);
     }
 }

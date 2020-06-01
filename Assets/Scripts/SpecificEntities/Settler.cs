@@ -24,6 +24,26 @@ public class Settler : Animated
         this.originalColor = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
     }
 
+    internal void QuitEveryThing()
+    {
+        QuitWork();
+        QuitCombat();
+    }
+
+    internal void QuitCombat()
+    {
+        this.isInCombat = false;
+        this.targetOfAttack = null;
+        this.targetOfAttack.WithdrawAttacker(this);
+    }
+
+    internal void StartAttack(Entity otherEntityUnderAttck)
+    {
+        QuitEveryThing();
+        this.targetOfAttack = otherEntityUnderAttck;
+        this.isInCombat = true;
+    }
+
     // Update is called once per frame
     protected new void Update()
     {
@@ -34,6 +54,16 @@ public class Settler : Animated
     private void HandleState()
     {
         HandleWorkStuff();
+        HandleCombate();
+    }
+
+    private void HandleCombate()
+    {
+        if (this.isInCombat)
+        {
+            // change color
+     
+        }
     }
 
     private void HandleWorkStuff()
@@ -126,7 +156,7 @@ public class Settler : Animated
 
     private void HandleMoveCommand(Vector3 point)
     {
-        QuitWork();
+        QuitEveryThing();
         MoveTo(point);
     }
 
