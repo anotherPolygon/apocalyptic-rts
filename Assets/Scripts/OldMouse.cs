@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems; // to identify if GUI was pressed
 
 
-public class MouseInputManager : MonoBehaviour
+public class OldMouse : MonoBehaviour
 {
     private GameObject rayCastHitObject;
     public GameObject recievedSelectedObject;
@@ -14,7 +14,7 @@ public class MouseInputManager : MonoBehaviour
     public List<GameObject> selectedEntitiesGameObjects;
     private Entity[] entites;
 
-    public Image selectionBox;
+    public Image selectionBoxImage;
     private RectTransform rt;
     private Vector3 startScreenPos;
     public Canvas canvas;
@@ -27,14 +27,14 @@ public class MouseInputManager : MonoBehaviour
         GameEvents.current.reportSelectedTrigger += SelectedCallback;
         recievedSelectedObject = null;
 
-        if (selectionBox != null)
+        if (selectionBoxImage != null)
         {
             //We need to reset anchors and pivot to ensure proper positioning
-            rt = selectionBox.GetComponent<RectTransform>();
-            rt.pivot = Vector2.one * .5f;
-            rt.anchorMin = Vector2.one * .5f;
-            rt.anchorMax = Vector2.one * .5f;
-            selectionBox.gameObject.SetActive(false);
+            rt = selectionBoxImage.GetComponent<RectTransform>();
+            rt.pivot = Vector2.one * Constants.selectionBoxPivot;
+            rt.anchorMin = Vector2.one * Constants.selectionBoxMinimumAnchor;
+            rt.anchorMax = Vector2.one * Constants.selectionBoxMaximumAnchor;
+            selectionBoxImage.gameObject.SetActive(false);
 
         }
 
@@ -55,7 +55,7 @@ public class MouseInputManager : MonoBehaviour
         
         if (Input.GetMouseButtonDown(0))
         {
-            if (selectionBox == null)
+            if (selectionBoxImage == null)
                 return;
             //Storing these variables for the selectionBox
             startScreenPos = Input.mousePosition;
@@ -65,7 +65,7 @@ public class MouseInputManager : MonoBehaviour
             selectedEntitiesGameObjects = new List<GameObject>();
         }
         //If we never set the selectionBox variable in the inspector, we are simply not able to drag the selectionBox to easily select multiple objects. 'Regular' selection should still work
-        if (selectionBox == null)
+        if (selectionBoxImage == null)
             return;
 
         //We finished our selection box when the key is released
@@ -83,7 +83,7 @@ public class MouseInputManager : MonoBehaviour
             }
 
         }
-        selectionBox.gameObject.SetActive(isSelecting);
+        selectionBoxImage.gameObject.SetActive(isSelecting);
         if (isSelecting)
         {
             Bounds b = new Bounds();
@@ -132,18 +132,23 @@ public class MouseInputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            // Identify if ray hit GUI
+            // if raycast hit a gameobject
             if (EventSystem.current.IsPointerOverGameObject(-1) == false)
             {
+                // get the gameobject from that we hit
                 rayCastHitObject = hit.collider.gameObject;
+
+                // Trigger event of selection in gameObject
                 onEntitySelectionTrigger(rayCastHitObject);
-                if(recievedSelectedObject != null)
+
+                // this is somehow to maintain a list of selected objects
+                if (recievedSelectedObject != null)
                     selectedEntitiesGameObjects.Add(recievedSelectedObject);
-                Debug.Log(rayCastHitObject);
+                Game.Manager.DebugConsole.Log(rayCastHitObject, "Ray Cast Hit");
             }
             else
             {
-                Debug.Log("GUI - Ray case hit GUI");
+                Game.Manager.DebugConsole.Log("GUI - Ray case hit GUI", "Ray Cast Hit");
             }
 
         }

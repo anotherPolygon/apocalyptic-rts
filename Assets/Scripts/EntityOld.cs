@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Entity : MonoBehaviour
+public class EntityOld : MonoBehaviour
 {
     public GameObject player;
-    private MouseInputManager mouseInput;
+    //private MouseInputManager mouseInput;
 
     public bool isSelected = false;
     public int health = 100;
@@ -51,7 +51,7 @@ public class Entity : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         player = GameObject.Find("Player");
-        mouseInput = player.GetComponent<MouseInputManager>();
+        //mouseInput = player.GetComponent<MouseInputManager>();
 
         HBtrasform = transform.Find("HB");
 
@@ -65,12 +65,12 @@ public class Entity : MonoBehaviour
         // Setting a defauls method
         currentMethod = UnitsMethods.Work;
 
-        UActions = new UnitsActions();
+        //UActions = new UnitsActions();
         currentAssignedBuilding = null;
 
         settlerColor = gameObject.GetComponentInChildren<Renderer>().material.color;
     }
-    private void ExecuteMainMethodCallback(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
+    private void ExecuteMainMethodCallbackPseudo(List<GameObject> selectedGameObjectsList, GameObject targetObject, Vector3 point)
     {
         // is this unit selected?
         //   move to postition()
@@ -106,7 +106,7 @@ public class Entity : MonoBehaviour
 
                 currentMethod = UnitsMethods.Work;
                 // Player's side
-                if (gameObjectClass.isOwnedByPlayer)
+                if (gameObjectClass.isPlayer)
                 {
                     if (gameObjectClass.isBuilding)
                     {
@@ -147,7 +147,7 @@ public class Entity : MonoBehaviour
                         Debug.Log(resourceObject.AssociatedDropOffBuildig[0].transform.position);
                     }
                     // Enemy
-                    else if (gameObjectClass.isEnemy)
+                    else if (!gameObjectClass.isPlayer)
                     {
 
                     }
