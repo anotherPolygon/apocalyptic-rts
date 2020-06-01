@@ -1,0 +1,4 @@
+- Inheritence in C# - how it works
+- Static or not -  what is it?
+- Dictionaries in C#
+
