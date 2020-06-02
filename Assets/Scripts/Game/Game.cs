@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Game : MonoBehaviour
 {
@@ -15,6 +16,13 @@ public class Game : MonoBehaviour
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>();
+
+    public enum SettlerRoles
+    {
+        Soldier,
+        Worker,
+    };
+    
 
     private void Awake()
     {

@@ -6,6 +6,7 @@ public class Unit : Entity
 {
     public bool isInCombat =  false;
     public Entity targetOfAttack =  null;
+    public Game.SettlerRoles currentRole;
 
     // Start is called before the first frame update
     protected new void Start()
@@ -50,5 +51,10 @@ public class Unit : Entity
     private void ReportSelected(GameObject gameObjectInstance)
     {
         GameEvents.current.reportSelected(gameObjectInstance);
+    }
+
+    virtual internal void StartAttack(Entity otherEntityUnderAttck)
+    {
+        // overriden in settler
     }
 }
