@@ -38,4 +38,12 @@ public class Events : MonoBehaviour
         }
     }
 
+    //public event Action<GameObject> OnEnterResource;
+    //public void EnterResource(GameObject)
+    //{
+    //    if (OnEnterResource != null)
+    //    {
+    //        OnEnterResource(hit);
+    //    }
+    //}
 }

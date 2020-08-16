@@ -24,4 +24,23 @@ public class Constants
     public const int maxSelectedSettlers = 12;
 
     public const string terrainGameObjectTag = "Terrain";
+
+    public enum SettlerRoles
+    {
+        Soldier,
+        Worker,
+        Gatherer,
+    };
+
+    public enum ResourceGatheringState
+    {
+        NotGathering,
+        TowardsResource,
+        CollectResource,
+        WaitForColloecrion,
+        DeliverResource,
+        DropResource,
+    };
+
+
 }

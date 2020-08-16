@@ -5,27 +5,49 @@ using UnityEngine;
 public class Resource : Entity
 {
     public ResourceManager RM;
-    public List<GameObject> AssociatedDropOffBuildig;
+    private List<Storage> storagePlaces;
 
     // Start is called before the first frame update
     protected new void Start()
     {
+        base.Start();
         // Defining the entity as Resource
         this.isResource = true;
-        
-        // gettin a reffernce to the resource manager
-        RM = GameObject.Find("Player").GetComponent<ResourceManager>();
-
-        // linking betwee resource(junk) to the list that holds *player's* JunkPilesContainers
-        // Pay attention to how can i know the containers are owned by player??
-        AssociatedDropOffBuildig = RM.JunkPilesContainers;
     }
 
-   
-
+    
     // Update is called once per frame
     protected new void Update()
     {
-        
+        base.Update();
     }
+
+    override internal void InteractWithSettler(Settler settler)
+    {
+        Storage closestStorge = GetClosestDropoffPoint(settler.isPlayer);
+        settler.InitiateGatheringProcess(this, closestStorge);
+        Debug.Log(this.name + " Interacting with " + settler.name);
+    }
+
+    public Storage GetClosestDropoffPoint(bool isPlayer)
+    {
+        storagePlaces = Game.Manager.RM.tag2Storage[this.tag];
+        Storage closestStorge = null;
+        float minDist = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+        foreach (Storage s in storagePlaces)
+        {
+            Debug.Log(s.name);
+            float dist = Vector3.Distance(s.transform.position, currentPosition);
+            if (dist < minDist)
+            {
+                closestStorge = s;
+                minDist = dist;
+            }
+        }
+       // adress if player requsted and if  storage owned by player --> probably iside the if
+
+        return closestStorge;
+    }
+
 }

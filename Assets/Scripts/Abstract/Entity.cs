@@ -22,18 +22,11 @@ public class Entity : MonoBehaviour
     public int id;
 
     public Dictionary<int, Unit> attackers = new Dictionary<int, Unit>();
-    // Role2Method dictionary provides a map of methods defined by role
-    public Dictionary<Game.SettlerRoles, Action<Settler>> Role2Method = new Dictionary<Game.SettlerRoles, Action<Settler>>();
 
     protected void Start()
     {
         unityObjects = new common.objects.UnityObjects(gameObject);
         id = Game.Manager.RegisterEntity(this);
-
-        // Injecting the dictionary with the role-methods map
-        Role2Method.Add(Game.SettlerRoles.Worker, InteractWithSettler);
-        Role2Method.Add(Game.SettlerRoles.Soldier, GetAttacked);
-
     }
 
     internal void WithdrawAttacker(Unit attcker)
@@ -45,12 +38,6 @@ public class Entity : MonoBehaviour
     {
         attackers.Add(attacker.id, attacker);
         attacker.StartAttack(this);
-    }
-
-    public void InteractWithSettlerAlterntive(Settler settler)
-    {
-        Role2Method[settler.currentRole](settler);
-            
     }
 
     virtual internal void InteractWithSettler(Settler settler)

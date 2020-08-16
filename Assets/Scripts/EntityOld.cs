@@ -144,7 +144,6 @@ public class EntityOld : MonoBehaviour
                         Debug.Log("Resource " + gameObjectClass.name);
                         Vector3 resourcePostion = gameObjectClass.transform.position;
                         Resource resourceObject = gameObjectClass.GetComponent<Resource>();
-                        Debug.Log(resourceObject.AssociatedDropOffBuildig[0].transform.position);
                     }
                     // Enemy
                     else if (!gameObjectClass.isPlayer)

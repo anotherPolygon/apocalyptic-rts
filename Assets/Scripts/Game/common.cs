@@ -98,6 +98,9 @@ namespace common
             public readonly Canvas canvas;
             public readonly RectTransform rectTransform;
             public readonly NavMeshAgent navMeshAgent;
+            public readonly Animator animator;
+            public readonly AudioSource audioSource;
+            public readonly Collider collider;
 
             public readonly Dictionary<string, UnityObjects> childs = new Dictionary<string, UnityObjects>();
 
@@ -110,6 +113,9 @@ namespace common
                 canvas = givenGameObject.GetComponent<Canvas>();
                 rectTransform = givenGameObject.GetComponent<RectTransform>();
                 navMeshAgent = givenGameObject.GetComponent<NavMeshAgent>();
+                animator = givenGameObject.GetComponent<Animator>();
+                audioSource = givenGameObject.GetComponent<AudioSource>();
+                collider = givenGameObject.GetComponent<Collider>();
 
                 InitializeChildUnityObjects();
             }

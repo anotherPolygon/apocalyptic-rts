@@ -12,18 +12,14 @@ public class Game : MonoBehaviour
     public CameraController CameraController;
     public Mouse Mouse;
     public State State;
+    public QuaziTimer Timer;
+    public ResourceManager RM;
+
     //public Player Player;
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
-    Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>();
-
-    public enum SettlerRoles
-    {
-        Soldier,
-        Worker,
-    };
+    Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>(); 
     
-
     private void Awake()
     {
         // if no Game object exists yet
@@ -44,6 +40,13 @@ public class Game : MonoBehaviour
         Mouse = GetComponent<Mouse>();
         CameraController = GetComponent<CameraController>();
         State = GetComponent<State>();
+        Timer = GetComponent<QuaziTimer>();
+        RM = GetComponent<ResourceManager>();
+        
+    }
+    public void Update()
+    {
+        // pass
     }
 
     public int RegisterEntity(Entity entityToRegister)

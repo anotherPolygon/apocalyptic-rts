@@ -2,13 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Settler : Animated
 {
     public GameObject healthBar;
     private Color originalColor;
-    private WorkBuilding workPlace;
+    public WorkBuilding workPlace;
+    public Constants.SettlerRoles currentRole;
+    public Constants.ResourceGatheringState currentGatherState;
 
+    public GameObject junkPiece;
+    // Resource Gathering:
+    public Resource targetResource;
+    float distToTargetResource;
+    float minDistanceToTargetResource = 4.5f;
+    public bool isGathering = false;
+
+    // Animation parameters
+    Animator animator;
+    private bool isRunining;
+    private bool isDeliveringJunk;
+    private bool isCollectingJunk;
+    //    #Other boolians may be connected to animaiton from settler or unit properties
+    
     protected new void Start()
     {
         base.Start();
@@ -16,36 +33,33 @@ public class Settler : Animated
         InitizalizeState();
         InitizalizeHealthBar();
         InitizalizeEventListeners();
+        InitializeAnimatorParameters();
+
+        junkPiece = GetComponentInChildren<JunkPiece>().gameObject;
     }
 
+    // Initializations
     private void InitizalizeState()
     {
         this.isSelected = false;
         this.originalColor = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
-        // Defining default role as a worker
-        this.currentRole = Game.SettlerRoles.Worker;
+        this.currentRole = Constants.SettlerRoles.Worker;  // Defining default role as a worker
+        this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
     }
 
-    internal void QuitEveryThing()
+    private void InitializeAnimatorParameters()
     {
-        QuitWork();
-        QuitCombat();
+        animator = this.unityObjects.childs[Constants.settlerMeshName].animator;
+        isRunining = false;
+        isDeliveringJunk = false;
+        isCollectingJunk = false;
     }
 
-    // Update is called once per frame
-    protected new void Update()
+    private void HandleAnimatorParameters()
     {
-        base.Update();
-        HandleState();
+        animator.SetBool("isRuning", isRunining);
+        animator.SetBool("isShooting", isShooting);
     }
-
-    private void HandleState()
-    {
-        HandleWorkStuff();
-        HandleCombate();
-    }
-
-    // Initializations
     private void InitizalizeHealthBar()
     {
         healthBar = transform.Find(Constants.healthBarGameObjectName).gameObject;
@@ -67,7 +81,55 @@ public class Settler : Animated
     {
         Events.current.OnRequestAction -= HandleGeneralAction;
     }
+    
+    // Update is called once per frame
+    protected new void Update()
+    {
+        base.Update();
+        HandleState();
+    }
+    
+    // State and Animation Handlers
 
+    private void HandleState()
+    {
+        HandleWorkStuff();
+        HandleCombate();
+        HandleGatheringState();
+        HandleAnimatorParameters();
+        HandleAnimation();            
+    }
+
+    private void HandleAnimation()
+    {
+        
+
+        if (isInCombat)
+        {
+            //animator.Play("Cowboy_2_Shoot");
+        }
+        
+        else if (CheckNavMeshArrived(this.unityObjects.navMeshAgent))
+        {
+            // animator.Play("Idle");
+            //animator.Play("Cowboy_2_Idle");
+            isRunining = false;
+        }
+        else
+        {
+            // animator.Play("Run");
+            //animator.Play("Cowboy_2_Run");
+            isRunining = true;
+        }
+    }
+
+    internal void QuitEveryThing()
+    {
+        QuitWork();
+        QuitCombat();
+        QuitGathering();
+    }
+    
     // General Action 
     private void HandleGeneralAction(RaycastHit hit)
     {
@@ -80,6 +142,7 @@ public class Settler : Animated
         }
         else
         {
+            // Here adress an if not - manually roled changed - change role automatically
             ChangeRole(_otherEntity);
             InteractWithOtherEntity(_otherEntity);
         }
@@ -89,23 +152,116 @@ public class Settler : Animated
     // Interatcions determinants
     private void ChangeRole(Entity otherEntity)
     {
-        if (!otherEntity.isPlayer) // Entitiy is Enemy
-            this.currentRole = Game.SettlerRoles.Soldier;
-        else // owened or terrain
-            this.currentRole = Game.SettlerRoles.Worker;
+        if (!otherEntity.isPlayer)
+        {
+            if (otherEntity.isResource)
+                this.currentRole = Constants.SettlerRoles.Gatherer;
+            else // Entitiy is Enemy
+                this.currentRole = Constants.SettlerRoles.Soldier;
+
+        }
+        // owened:
+        else if (otherEntity.isBuilding) // WorkBuilding
+            this.currentRole = Constants.SettlerRoles.Worker;
     }
 
     private void InteractWithOtherEntity(Entity otherEntity)
     {
-        //otherEntity.InteractWithSettler(this);
-        otherEntity.InteractWithSettlerAlterntive(this);
+        if (this.currentRole == Constants.SettlerRoles.Soldier)
+            otherEntity.GetAttacked(this);
+        // this time its wiered because in the follwing no matter what - we reach "InteractWithSettler"
+        else if (this.currentRole == Constants.SettlerRoles.Worker)
+            otherEntity.InteractWithSettler(this);
+        else if (this.currentRole == Constants.SettlerRoles.Gatherer)
+            otherEntity.InteractWithSettler(this);
+    }
+
+    // Resource Gathering Methods
+
+    private void HandleGatheringState()
+    {
+        if (isGathering)
+        {
+            checkIfArrivedToTargetResource();
+            StartGathering();
+            StartDelivering();
+            StartDroppingResource();
+            // maybe another function that starts it all over
+
+            // isTowardsGatheing to flase
+            // is Gathering to true
+
+            //else if (this.currentGatherState == Constants.ResourceGatheringState.TowardsResource)
+        }
+    }
+    private void checkIfArrivedToTargetResource()
+    {
+        if (this.currentGatherState == Constants.ResourceGatheringState.TowardsResource)
+        {
+            distToTargetResource = Vector3.Distance(transform.position, targetResource.transform.position);
+            if (minDistanceToTargetResource >= distToTargetResource)
+                this.currentGatherState = Constants.ResourceGatheringState.CollectResource;
+        }    
+    }
+
+    private void StartGathering()
+    {
+        // animation
+        // stoping motion
+        // calling delayed action of + 1 piece
+        if (this.currentGatherState == Constants.ResourceGatheringState.CollectResource)
+        {
+            this.unityObjects.navMeshAgent.SetDestination(transform.position); // in order to stop the setller!
+            this.unityObjects.childs[Constants.settlerMeshName].animator.Play("CollectJunk");
+        }
+
+    }
+    private void StartDelivering()
+    {
+        if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
+            junkPiece.SetActive(true);
+        //
+
+    }
+    private void StartDroppingResource()
+    {
+        if (this.currentGatherState == Constants.ResourceGatheringState.DropResource)
+        {
+
+        }
+    }
+
+    internal void InitiateGatheringProcess(Resource gatheredResource, Storage closestStorage)
+    {
+        QuitEveryThing();
+        isGathering = true;
+        this.currentGatherState = Constants.ResourceGatheringState.TowardsResource;
+        targetResource = gatheredResource;
+        MoveTo(targetResource.transform.position);
+        Debug.Log(this.name + " started gathering " + gatheredResource + " --> delivered to " + closestStorage.name);
+    }
+
+    private void QuitGathering()
+    {
+        isGathering = true;
+        this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
+        junkPiece.SetActive(false);
+
+        targetResource = null;
+        // What to do if i now start gathering X and quit gathering Y - drop the gathered cube??
     }
 
     // Combat Methods
+    private void Attack()
+    {
+        animator.Play("Shoot");
+    }
+
     private void HandleCombate()
     {
         if (this.isInCombat)
         {
+            this.transform.LookAt(targetOfAttack.transform.position);
             ChangeMeshColor(this.targetOfAttack.unityObjects.childs[Constants.fearlWolfMeshName].renderer.material.color);
         }
             
@@ -121,27 +277,40 @@ public class Settler : Animated
         QuitEveryThing();
         this.targetOfAttack = otherEntityUnderAttck;
         this.isInCombat = true;
+        this.isShooting = true;
+        Game.Manager.Timer.RegisterTimedAction(this.name + "Attack", Attack, 45, 20);
     }
 
     internal void QuitCombat()
     {
+        Game.Manager.Timer.RemoveTimedAction(this.name + "Attack"); // Needs to be fixxed
         this.isInCombat = false;
+        this.isShooting = false;
         if(this.targetOfAttack != null)
         {
             this.targetOfAttack.WithdrawAttacker(this);
             this.targetOfAttack = null;
         }
         
-        
-        
+
     }
+    
     // Work Methods
+    private void QuitWork()
+    {
+        if (workPlace != null)
+            workPlace.FireWorker(this);
+        workPlace = null;
+    }
+
     private void HandleWorkStuff()
     {
-        if (workPlace is null)
-            ChangeMeshColor(originalColor);
-        else
-            ChangeMeshColor(workPlace.unityObjects.renderer.material.color);
+        //if (workPlace is null)
+        //    //Debug.Log("Not Working");
+        //    //ChangeMeshColor(originalColor);
+        //else
+        //    //Debug.Log("Working"); 
+        //    //ChangeMeshColor(workPlace.unityObjects.renderer.material.color);
     }
 
     internal void StartWorking(WorkBuilding building)
@@ -149,13 +318,16 @@ public class Settler : Animated
         QuitEveryThing();
         workPlace = building;
         MoveTo(building.unityObjects.transform.position);
+        
+        //Vector3 cent = building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.center;
+        //float boundX = building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.size.x;
+        //MoveTo(cent + new Vector3(boundX,0,0));
+        //Debug.Log(building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.center);
+        //Debug.Log(building.unityObjects.childs["EntryPoint"].transform.position);
+        //Debug.Log(building.unityObjects.transform.position);
+        //NavMeshObstacle obstacle = building.GetComponent<NavMeshObstacle>();
     }
-    private void QuitWork()
-    {
-        if (workPlace != null)
-            workPlace.FireWorker(this);
-        workPlace = null;
-    }
+
 
     private void AssignToWork(WorkBuilding building)
     {
@@ -171,7 +343,27 @@ public class Settler : Animated
 
     private void MoveTo(Vector3 point)
     {
+        //this.unityObjects.childs[Constants.settlerMeshName].animator.SetLookAtPosition(point);
+        // Line above raises an issue: "Setting and getting Body Position/Rotation, IK Goals, Lookat and BoneLocalRotation should only be done in OnAnimatorIK or OnStateIK
+        //                              UnityEngine.Animator:SetLookAtPosition(Vector3)"
         this.unityObjects.navMeshAgent.destination = point;
+        
+    }
+
+    // Check if we've reached the destination
+    private bool CheckNavMeshArrived(NavMeshAgent mNavMeshAgent)
+    {
+        if (!mNavMeshAgent.pathPending)
+        {
+            if (mNavMeshAgent.remainingDistance <= mNavMeshAgent.stoppingDistance)
+            {
+                if (!mNavMeshAgent.hasPath || mNavMeshAgent.velocity.sqrMagnitude == 0f)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Selection methods
@@ -216,7 +408,6 @@ public class Settler : Animated
         this.healthBar.SetActive(true);
         Game.Manager.State.RegisterMultipleSelection(this);
     }
-
 
     // Changeing Color
     private void ChangeMeshColor(Color color)

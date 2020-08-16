@@ -5,8 +5,9 @@ using UnityEngine;
 public class Unit : Entity
 {
     public bool isInCombat =  false;
+    public bool isShooting = false;
     public Entity targetOfAttack =  null;
-    public Game.SettlerRoles currentRole;
+   
 
     // Start is called before the first frame update
     protected new void Start()

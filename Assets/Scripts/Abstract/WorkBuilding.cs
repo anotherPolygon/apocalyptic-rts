@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WorkBuilding : Building
 {
-    Dictionary<int, Settler> workers = new Dictionary<int, Settler>();
+    public Dictionary<int, Settler> workers = new Dictionary<int, Settler>();
     // Start is called before the first frame update
     new void Start()
     {
@@ -21,12 +21,26 @@ public class WorkBuilding : Building
     {
         workers.Add(settler.id, settler);
         settler.StartWorking(this);
+        PrintDictionaryOnChange(workers);
     }
 
     internal void FireWorker(Settler settler)
     {
         workers.Remove(settler.id);
-    } 
+        PrintDictionaryOnChange(workers);
+    }
+
+    internal void PrintDictionaryOnChange(Dictionary<int, Settler> dict)
+    {
+        string mess = "Workers in" + this.name;
+        foreach (var item in dict)
+        {
+            mess = mess + " " + item.Key;
+        }
+
+        Debug.Log(mess);
+    }
+
 }
 
 
