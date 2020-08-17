@@ -12,25 +12,33 @@ public class QuaziTimer : MonoBehaviour
 
     //private List<TimedAction> timedActions = new List<TimedAction>();
     private Dictionary<string, TimedAction> timedActions = new Dictionary<string, TimedAction>();
-
+    private List<string> timedActionsKeys = new List<string>();
     // Start is called before the first frame update
     void Start()
     {
+       
         //RegisterTimedAction(Shoot, 50);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-        foreach(var item in timedActions)
+       for (int i=0; i<timedActionsKeys.Count; i++)
         {
-            command = item.Value.Tick();
+            Debug.Log(timedActionsKeys[i]);
+            command = timedActions[timedActionsKeys[i]].Tick();
             if (command == "Remove")
-                RemoveTimedAction(item.Value.Label);
-            //Debug.Log(timedAction.counter);
+                RemoveTimedAction(timedActions[timedActionsKeys[i]].Label);
         }
-       // Debug.Log(counter);
+
+        // foreach(var item in timedActions)
+        // {
+        //     command = item.Value.Tick();
+        //     if (command == "Remove")
+        //         RemoveTimedAction(item.Value.Label);
+        //     //Debug.Log(timedAction.counter);
+        // }
+        //// Debug.Log(counter);
 
     }
 
@@ -40,13 +48,17 @@ public class QuaziTimer : MonoBehaviour
         if (!playOnceAfterDelay)
             ta.Func(); // Strat with calling the function
         timedActions.Add(label, ta);
+        timedActionsKeys.Add(label);
     }
 
     public void RemoveTimedAction(string label)
     {
         TimedAction a;
         if (timedActions.TryGetValue(label, out a))
+        {
             timedActions.Remove(label);
+            timedActionsKeys.Remove(label);
+        }
     }
 }
 
@@ -75,20 +87,18 @@ public class TimedAction
     public string Tick()
     {
         counter = counter + 1;
+        Debug.Log(Label + " " + counter);
         noise = rnd.Next(-AllowedDeviation, AllowedDeviation);
         FrameRateNoise = noise + FrameRate;
         if (counter >= FrameRateNoise)
         {
             counter = 0;
             Func();
+            if (PlayOnceAfterDelay)
+                return "Remove";// order to remove
+            else
+                return "Remain";
         }
-        if (PlayOnceAfterDelay)
-        {
-            return "Remove";// order to remove
-        }
-        else
-        {
-            return "Remain";
-        }
+        return "Remain";
     }
 }
