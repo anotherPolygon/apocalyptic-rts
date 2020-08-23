@@ -15,7 +15,6 @@ public class Resource : Entity
         this.isResource = true;
     }
 
-    
     // Update is called once per frame
     protected new void Update()
     {

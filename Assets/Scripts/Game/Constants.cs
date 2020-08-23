@@ -25,6 +25,8 @@ public class Constants
 
     public const string terrainGameObjectTag = "Terrain";
 
+    public const string junkResourceName = "Junk";
+
     public enum SettlerRoles
     {
         Soldier,

@@ -951,23 +951,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a32a275eb4bd54bb593bcdc942d06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  isSelected: 0
-  health: 100
-  maxHealth: 100
-  HBtrasform: {fileID: 0}
+  isTerrain: 0
   isUnit: 0
+  isAnimated: 0
+  isMonster: 0
+  isFeralWolf: 0
+  isSettler: 0
   isBuilding: 0
   isResource: 0
-  entityName: 
-  isOwnedByPlayer: 1
-  isEnemy: 0
-  UActions: {fileID: 0}
-  currentAssignedBuilding: {fileID: 0}
-  agent: {fileID: 0}
-  currentMethod: 0
-  AssignedWorkers: []
-  maxWorkers: 1
+  isPlayer: 0
+  isSelected: 0
+  id: 0
   RM: {fileID: 0}
 --- !u!1 &8296988178585649527
 GameObject:

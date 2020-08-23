@@ -63,6 +63,7 @@ public class Settler : Animated
         animator.SetBool("isCollecting", isCollectingJunk);
         animator.SetBool("isDelivering", isDeliveringJunk);
     }
+
     private void InitizalizeHealthBar()
     {
         healthBar = transform.Find(Constants.healthBarGameObjectName).gameObject;
@@ -183,18 +184,11 @@ public class Settler : Animated
 
     private void HandleGatheringState()
     {
-        if (isGathering)
+        if (isGathering) // maybe change to role...
         {
             checkIfArrivedToTargetResource();
             StartGathering();
-            //StartDelivering();
             StartDroppingResource();
-            // maybe another function that starts it all over
-
-            // isTowardsGatheing to flase
-            // is Gathering to true
-
-            //else if (this.currentGatherState == Constants.ResourceGatheringState.TowardsResource)
         }
     }
     private void checkIfArrivedToTargetResource()
@@ -209,21 +203,19 @@ public class Settler : Animated
 
     private void StartGathering()
     {
-        // animation
-        // stoping motion
-        // calling delayed action of + 1 piece
         if (this.currentGatherState == Constants.ResourceGatheringState.CollectResource)
         {
-            this.unityObjects.navMeshAgent.SetDestination(transform.position); // in order to stop the setller!
+            this.unityObjects.navMeshAgent.SetDestination(transform.position); // in order to stop the setller! 
+            // pay attentions to navmesh sticking to the place set at destination.
             isCollectingJunk = true;
-            Game.Manager.Timer.RegisterTimedAction(this.name + "Deliver Junk", StartDelivering, 100, 10, true);
+            bool isOneTimeAction = true;
+            Game.Manager.Timer.RegisterTimedAction(this.name + "Deliver Junk", StartDelivering, 100, 10, isOneTimeAction);
             this.currentGatherState = Constants.ResourceGatheringState.WaitForColloecrion;
         }
 
     }
     private void StartDelivering()
     {
-        Debug.Log("here");
         this.currentGatherState = Constants.ResourceGatheringState.DeliverResource;
         junkPiece.SetActive(true);
         isCollectingJunk = false;
@@ -236,11 +228,13 @@ public class Settler : Animated
         if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
         {
             float distToTargetStorage = Vector3.Distance(transform.position, assignedResourceStoragePlace.transform.position);
-            if (2.5f >= distToTargetStorage)
+            if (3f >= distToTargetStorage)
             {
-                this.unityObjects.navMeshAgent.SetDestination(transform.position);
+                this.unityObjects.navMeshAgent.SetDestination(transform.position); // pay attention - mabe other other method
                 isDeliveringJunk = false;
                 junkPiece.SetActive(false);
+                Events.current.GatheredResource(targetResource);
+                InitiateGatheringProcess(targetResource, assignedResourceStoragePlace);
             }
         }
     }
@@ -251,11 +245,11 @@ public class Settler : Animated
         isGathering = true;
         this.currentGatherState = Constants.ResourceGatheringState.TowardsResource;
         assignedResourceStoragePlace = closestStorage;
-        targetResource = gatheredResource;
-        MoveTo(targetResource.transform.position);
+        targetResource = gatheredResource;MoveTo(targetResource.transform.position);
         Debug.Log(this.name + " started gathering " + gatheredResource + " --> delivered to " + closestStorage.name);
     }
 
+        
     private void QuitGathering()
     {
         isGathering = true;

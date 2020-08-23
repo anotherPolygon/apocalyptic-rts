@@ -369,6 +369,7 @@ MonoBehaviour:
   currentGatherState: 0
   junkPiece: {fileID: 0}
   targetResource: {fileID: 0}
+  assignedResourceStoragePlace: {fileID: 0}
   isGathering: 0
 --- !u!114 &3294092752241432608
 MonoBehaviour:
@@ -559,7 +560,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8000bb265fd143146b5b4be6c8fc2537, type: 2}
+      objectReference: {fileID: 2100000, guid: 7b8aa8e86a32b234f8fdf14f458bfefc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 792492a7b0ddbd04c9b64a055db89c04, type: 3}
 --- !u!1 &3922561244522427945 stripped

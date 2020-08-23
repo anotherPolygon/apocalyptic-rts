@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public class Game : MonoBehaviour
 {
     // to define game as a singleton (so that class has reference to the only instance)
@@ -14,12 +15,14 @@ public class Game : MonoBehaviour
     public State State;
     public QuaziTimer Timer;
     public ResourceManager RM;
+    public UIManager uIManager;
 
     //public Player Player;
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>(); 
-    
+    public List<Bounds> playerBuildingBounds = new List<Bounds>();
+
     private void Awake()
     {
         // if no Game object exists yet
@@ -42,6 +45,7 @@ public class Game : MonoBehaviour
         State = GetComponent<State>();
         Timer = GetComponent<QuaziTimer>();
         RM = GetComponent<ResourceManager>();
+        uIManager = GetComponent<UIManager>();
         
     }
     public void Update()

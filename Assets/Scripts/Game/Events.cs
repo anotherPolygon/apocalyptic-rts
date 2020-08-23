@@ -38,12 +38,12 @@ public class Events : MonoBehaviour
         }
     }
 
-    //public event Action<GameObject> OnEnterResource;
-    //public void EnterResource(GameObject)
-    //{
-    //    if (OnEnterResource != null)
-    //    {
-    //        OnEnterResource(hit);
-    //    }
-    //}
+    public event Action<Resource> onGatheredResource;
+    public void GatheredResource(Resource resource)
+    {
+        if (onGatheredResource != null)
+        {
+            onGatheredResource(resource);
+        }
+    }
 }

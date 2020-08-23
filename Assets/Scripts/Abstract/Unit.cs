@@ -39,14 +39,12 @@ public class Unit : Entity
         if (selectedObject == gameObject)
         {
             Select();
-            ReportSelected(gameObject);
-            
+            ReportSelected(gameObject); 
         }
         else
         {
             Diselect();
         }
-
     }
 
     private void ReportSelected(GameObject gameObjectInstance)
