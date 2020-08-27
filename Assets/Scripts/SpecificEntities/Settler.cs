@@ -9,7 +9,7 @@ public class Settler : Animated
     public GameObject healthBar;
     private Color originalColor;
     public WorkBuilding workPlace;
-    public Constants.SettlerRoles currentRole;
+    public Constants.SettlerStates currentSettlerState;
     public Constants.ResourceGatheringState currentGatherState;
 
     public GameObject junkPiece;
@@ -44,7 +44,7 @@ public class Settler : Animated
     {
         this.isSelected = false;
         this.originalColor = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
-        this.currentRole = Constants.SettlerRoles.Worker;  // Defining default role as a worker
+        this.currentSettlerState = Constants.SettlerStates.Working;  // Defining default role as a worker
         this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
     }
 
@@ -74,6 +74,7 @@ public class Settler : Animated
     {
         Events.current.OnSingleSelection += HandleSingleSelection;
         Events.current.OnMultipleSelection += HandleMultipleSelection;
+        Events.current.onArivedToDestination += HandleArrived;
     }
 
     private void RegisterForSelectedStateEvents()
@@ -159,24 +160,24 @@ public class Settler : Animated
         if (!otherEntity.isPlayer)
         {
             if (otherEntity.isResource)
-                this.currentRole = Constants.SettlerRoles.Gatherer;
+                this.currentSettlerState = Constants.SettlerStates.Gathering;
             else // Entitiy is Enemy
-                this.currentRole = Constants.SettlerRoles.Soldier;
+                this.currentSettlerState = Constants.SettlerStates.InCombat;
 
         }
         // owened:
         else if (otherEntity.isBuilding) // WorkBuilding
-            this.currentRole = Constants.SettlerRoles.Worker;
+            this.currentSettlerState = Constants.SettlerStates.Working;
     }
 
     private void InteractWithOtherEntity(Entity otherEntity)
     {
-        if (this.currentRole == Constants.SettlerRoles.Soldier)
+        if (this.currentSettlerState == Constants.SettlerStates.InCombat)
             otherEntity.GetAttacked(this);
         // this time its wiered because in the follwing no matter what - we reach "InteractWithSettler"
-        else if (this.currentRole == Constants.SettlerRoles.Worker)
+        else if (this.currentSettlerState == Constants.SettlerStates.Working)
             otherEntity.InteractWithSettler(this);
-        else if (this.currentRole == Constants.SettlerRoles.Gatherer)
+        else if (this.currentSettlerState == Constants.SettlerStates.Gathering)
             otherEntity.InteractWithSettler(this);
     }
 
@@ -186,9 +187,9 @@ public class Settler : Animated
     {
         if (isGathering) // maybe change to role...
         {
-            checkIfArrivedToTargetResource();
-            StartGathering();
-            StartDroppingResource();
+            //checkIfArrivedToTargetResource();
+            //StartGathering();
+            //StartDroppingResource();
         }
     }
     private void checkIfArrivedToTargetResource()
@@ -201,17 +202,19 @@ public class Settler : Animated
         }    
     }
 
-    private void StartGathering()
+    private void StartGathering(NavMeshAgent a = null)
     {
-        if (this.currentGatherState == Constants.ResourceGatheringState.CollectResource)
-        {
+        //if (this.currentGatherState == Constants.ResourceGatheringState.CollectResource)
+       // {
             this.unityObjects.navMeshAgent.SetDestination(transform.position); // in order to stop the setller! 
-            // pay attentions to navmesh sticking to the place set at destination.
+                                                                               // pay attentions to navmesh sticking to the place set at destination.
+            this.currentGatherState = Constants.ResourceGatheringState.CollectResource;
             isCollectingJunk = true;
             bool isOneTimeAction = true;
             Game.Manager.Timer.RegisterTimedAction(this.name + "Deliver Junk", StartDelivering, 100, 10, isOneTimeAction);
             this.currentGatherState = Constants.ResourceGatheringState.WaitForColloecrion;
-        }
+            Events.current.onArivedToDestination -= StartGathering;
+        //  }
 
     }
     private void StartDelivering()
@@ -220,23 +223,26 @@ public class Settler : Animated
         junkPiece.SetActive(true);
         isCollectingJunk = false;
         isDeliveringJunk = true;
-        MoveTo(assignedResourceStoragePlace.gameObject.transform.position);
-
+        MoveTo(assignedResourceStoragePlace.gameObject.transform.position, 3f);
+        Events.current.onArivedToDestination += StartDroppingResource;
     }
-    private void StartDroppingResource()
+    private void StartDroppingResource(NavMeshAgent a = null)
     {
-        if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
-        {
-            float distToTargetStorage = Vector3.Distance(transform.position, assignedResourceStoragePlace.transform.position);
-            if (3f >= distToTargetStorage)
-            {
+        //if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
+        //{
+        //    float distToTargetStorage = Vector3.Distance(transform.position, assignedResourceStoragePlace.transform.position);
+        //    if (3f >= distToTargetStorage)
+        //    {
+                this.currentGatherState = Constants.ResourceGatheringState.DeliverResource;
                 this.unityObjects.navMeshAgent.SetDestination(transform.position); // pay attention - mabe other other method
                 isDeliveringJunk = false;
                 junkPiece.SetActive(false);
                 Events.current.GatheredResource(targetResource);
                 InitiateGatheringProcess(targetResource, assignedResourceStoragePlace);
-            }
-        }
+                Events.current.onArivedToDestination -= StartDroppingResource;
+
+        //    }
+        //}
     }
 
     internal void InitiateGatheringProcess(Resource gatheredResource, Storage closestStorage)
@@ -245,15 +251,20 @@ public class Settler : Animated
         isGathering = true;
         this.currentGatherState = Constants.ResourceGatheringState.TowardsResource;
         assignedResourceStoragePlace = closestStorage;
-        targetResource = gatheredResource;MoveTo(targetResource.transform.position);
+        targetResource = gatheredResource;
+        MoveTo(targetResource.transform.position);
+        Events.current.onArivedToDestination += StartGathering;
         Debug.Log(this.name + " started gathering " + gatheredResource + " --> delivered to " + closestStorage.name);
     }
 
         
     private void QuitGathering()
     {
-        isGathering = true;
+        isGathering = false;
         this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
+        this.currentSettlerState = Constants.SettlerStates.Idle;
+        Events.current.onArivedToDestination -= StartGathering;
+        Events.current.onArivedToDestination -= StartDroppingResource;
         junkPiece.SetActive(false);
 
         targetResource = null;
@@ -350,13 +361,21 @@ public class Settler : Animated
         MoveTo(point);
     }
 
-    private void MoveTo(Vector3 point)
+    private void MoveTo(Vector3 point, float distanceFromDestination = 0)
     {
         //this.unityObjects.childs[Constants.settlerMeshName].animator.SetLookAtPosition(point);
         // Line above raises an issue: "Setting and getting Body Position/Rotation, IK Goals, Lookat and BoneLocalRotation should only be done in OnAnimatorIK or OnStateIK
         //                              UnityEngine.Animator:SetLookAtPosition(Vector3)"
         this.unityObjects.navMeshAgent.destination = point;
-        
+        Game.Manager.ArrivalReporter.RegisterAgent(this.unityObjects.navMeshAgent, point, distanceFromDestination);
+    }
+
+    private void HandleArrived(NavMeshAgent agent)
+    {
+        if(agent == this.unityObjects.navMeshAgent)
+        {
+            //this.unityObjects.navMeshAgent.SetDestination(transform.position); // to stop the agent!
+        }
     }
 
     // Check if we've reached the destination

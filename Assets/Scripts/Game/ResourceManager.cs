@@ -11,6 +11,12 @@ public class ResourceManager : MonoBehaviour
 
     int junk = 0;
 
+    private void Awake()
+    {
+
+        tag2Storage = new Dictionary<string, List<Storage>>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

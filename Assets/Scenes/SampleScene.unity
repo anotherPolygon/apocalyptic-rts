@@ -4187,9 +4187,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: CowBoyRTS2
       objectReference: {fileID: 0}
+    - target: {fileID: 100034, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.808468
+      value: -12.3
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4197,23 +4201,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.939331
+      value: 20.9
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.9574116
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.28872678
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_RootOrder
@@ -4225,7 +4229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -146.436
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 4a5f8b3aebc5ef44d93b370322a30502, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -5171,6 +5175,7 @@ GameObject:
   - component: {fileID: 1209878673}
   - component: {fileID: 1209878674}
   - component: {fileID: 1209878670}
+  - component: {fileID: 1209878675}
   - component: {fileID: 1209878672}
   m_Layer: 0
   m_Name: Game
@@ -5225,6 +5230,7 @@ MonoBehaviour:
   Mouse: {fileID: 0}
   State: {fileID: 0}
   Timer: {fileID: 0}
+  ArrivalReporter: {fileID: 0}
   RM: {fileID: 0}
   uIManager: {fileID: 0}
   playerBuildingBounds: []
@@ -5306,6 +5312,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inAdditiveSelection: 0
+--- !u!114 &1209878675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209878665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d6979aea1945749ae0c1d6e014b8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentKeys: []
 --- !u!1 &1219835884
 GameObject:
   m_ObjectHideFlags: 0
@@ -5473,14 +5492,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250937579}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.6, y: 15.9, z: -10.2}
+  m_LocalRotation: {x: 0, y: 0.42261827, z: 0, w: 0.9063079}
+  m_LocalPosition: {x: -50.5, y: 22.9, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 534669905}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 50, z: 0}
 --- !u!114 &1250937585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6807,39 +6826,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1659928925}
   m_CullTransparentMesh: 0
---- !u!1 &1682106338 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7982814775192633580, guid: 624316bd90e18554e8022b8e3c017abc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1703471000}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1682106339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682106338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e08b67dfd48476448c55a80afe15b23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTerrain: 0
-  isUnit: 0
-  isAnimated: 0
-  isMonster: 0
-  isFeralWolf: 0
-  isSettler: 0
-  isBuilding: 0
-  isResource: 0
-  isPlayer: 0
-  isSelected: 0
-  id: 0
-  buildingBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  isStorage: 0
 --- !u!1 &1688406898
 GameObject:
   m_ObjectHideFlags: 0
@@ -6956,7 +6942,7 @@ PrefabInstance:
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.17
+      value: -40.7
       objectReference: {fileID: 0}
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}
@@ -6966,7 +6952,7 @@ PrefabInstance:
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 100.1
+      value: 19.4
       objectReference: {fileID: 0}
     - target: {fileID: 8973781258574401666, guid: 624316bd90e18554e8022b8e3c017abc,
         type: 3}
@@ -7010,39 +6996,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 624316bd90e18554e8022b8e3c017abc, type: 3}
---- !u!1 &1766638120 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7982814775192633580, guid: 624316bd90e18554e8022b8e3c017abc,
-    type: 3}
-  m_PrefabInstance: {fileID: 2593864030108720952}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1766638127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1766638120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e08b67dfd48476448c55a80afe15b23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTerrain: 0
-  isUnit: 0
-  isAnimated: 0
-  isMonster: 0
-  isFeralWolf: 0
-  isSettler: 0
-  isBuilding: 0
-  isResource: 0
-  isPlayer: 0
-  isSelected: 0
-  id: 0
-  buildingBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  isStorage: 0
 --- !u!1 &1851508381
 GameObject:
   m_ObjectHideFlags: 0

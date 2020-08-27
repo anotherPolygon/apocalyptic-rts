@@ -14,6 +14,7 @@ public class Game : MonoBehaviour
     public Mouse Mouse;
     public State State;
     public QuaziTimer Timer;
+    public NavMeshArrivalReporter ArrivalReporter;
     public ResourceManager RM;
     public UIManager uIManager;
 
@@ -35,17 +36,20 @@ public class Game : MonoBehaviour
         { 
             Destroy(gameObject); // to make sure there is only one Game
         }
-    }
-
-    public void Start()
-    {
+        // Have to happen before the Start() of other scripts that need these components
         DebugConsole = GetComponent<DebugConsole>();
         Mouse = GetComponent<Mouse>();
         CameraController = GetComponent<CameraController>();
         State = GetComponent<State>();
         Timer = GetComponent<QuaziTimer>();
+        ArrivalReporter = GetComponent<NavMeshArrivalReporter>();
         RM = GetComponent<ResourceManager>();
         uIManager = GetComponent<UIManager>();
+    }
+
+    public void Start()
+    {
+       
         
     }
     public void Update()

@@ -27,11 +27,12 @@ public class Constants
 
     public const string junkResourceName = "Junk";
 
-    public enum SettlerRoles
+    public enum SettlerStates
     {
-        Soldier,
-        Worker,
-        Gatherer,
+        Idle,
+        InCombat,
+        Working,
+        Gathering,
     };
 
     public enum ResourceGatheringState

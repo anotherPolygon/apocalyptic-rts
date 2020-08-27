@@ -158,5 +158,39 @@ namespace common
             _result += GetDictionaryKeysInfo<common.objects.UnityObjects>(unityObject.childs);
             return _result;
         }
+
+        // A method to find the center between several game objects
+        public static Vector3 FindCenterPoint(GameObject[] gos) {
+            if (gos.Length == 0)
+                 return Vector3.zero;
+
+            if (gos.Length == 1)
+                 return gos[0].transform.position;
+
+            Bounds bounds = new Bounds(gos[0].transform.position, Vector3.zero);
+             for (int i = 1; i<gos.Length; i++)
+                 bounds.Encapsulate(gos[i].transform.position); 
+             return bounds.center;
+        }
+
+
+        // Dosent work:
+        public static Entity FindClosestEntityType(GameObject lookingGameObject, List<Entity> typesList)
+        {
+            float minDist = Mathf.Infinity;
+            Entity closestEntityOfType = null; // pay attention the might return null!
+            Vector3 currentPosition = lookingGameObject.transform.position;
+            foreach (Entity entityOfType in typesList)
+            {
+                float dist = Vector3.Distance(entityOfType.gameObject.transform.position, currentPosition);
+                if (dist<minDist)
+                {
+                    closestEntityOfType = entityOfType;
+                    minDist = dist;
+                }
+            }
+            return closestEntityOfType;
+        }
     }
 }
+

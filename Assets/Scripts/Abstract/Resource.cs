@@ -32,18 +32,23 @@ public class Resource : Entity
     {
         storagePlaces = Game.Manager.RM.tag2Storage[this.tag];
         Storage closestStorge = null;
+
         float minDist = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
         foreach (Storage s in storagePlaces)
         {
-            Debug.Log(s.name);
-            float dist = Vector3.Distance(s.transform.position, currentPosition);
-            if (dist < minDist)
+            if (s.isPlayer)
             {
-                closestStorge = s;
-                minDist = dist;
+                float dist = Vector3.Distance(s.transform.position, currentPosition);
+                if (dist < minDist)
+                {
+                    closestStorge = s;
+                    minDist = dist;
+                }
             }
         }
+
+        //common.Utils.FindClosestEntityType(gameObject, storagePlaces);
        // adress if player requsted and if  storage owned by player --> probably iside the if
 
         return closestStorge;

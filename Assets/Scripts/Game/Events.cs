@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.AI;
 using UnityEngine;
 
 public class Events : MonoBehaviour
@@ -44,6 +45,15 @@ public class Events : MonoBehaviour
         if (onGatheredResource != null)
         {
             onGatheredResource(resource);
+        }
+    }
+
+    public event Action<NavMeshAgent> onArivedToDestination;
+    public void arivedToDestination(NavMeshAgent agent)
+    {
+        if (onArivedToDestination != null)
+        {
+            onArivedToDestination(agent);
         }
     }
 }

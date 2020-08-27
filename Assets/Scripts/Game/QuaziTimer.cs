@@ -6,18 +6,17 @@ using System;
 
 public class QuaziTimer : MonoBehaviour
 {
-    private int counter;
-    private int maxCounter; // An arbitrrary number that resets the ounter
     private string command; 
 
-    //private List<TimedAction> timedActions = new List<TimedAction>();
     private Dictionary<string, TimedAction> timedActions = new Dictionary<string, TimedAction>();
     private List<string> timedActionsKeys = new List<string>();
+    // FORMER SOLUTION: //
+    //private List<TimedAction> timedActions = new List<TimedAction>();
+    
     // Start is called before the first frame update
     void Start()
     {
        
-        //RegisterTimedAction(Shoot, 50);
     }
 
     // Update is called once per frame
@@ -25,12 +24,11 @@ public class QuaziTimer : MonoBehaviour
     {
        for (int i=0; i<timedActionsKeys.Count; i++)
         {
-            Debug.Log(timedActionsKeys[i]);
             command = timedActions[timedActionsKeys[i]].Tick();
             if (command == "Remove")
                 RemoveTimedAction(timedActions[timedActionsKeys[i]].Label);
         }
-
+        // ####### FORMER SOLUTION: #######  //
         // foreach(var item in timedActions)
         // {
         //     command = item.Value.Tick();
@@ -81,13 +79,12 @@ public class TimedAction
     }
 
     public int counter = 0;
-    int noise = 0;
-    int FrameRateNoise = 0;
+    public int noise = 0;
+    public int FrameRateNoise = 0;
 
     public string Tick()
     {
         counter = counter + 1;
-        Debug.Log(Label + " " + counter);
         noise = rnd.Next(-AllowedDeviation, AllowedDeviation);
         FrameRateNoise = noise + FrameRate;
         if (counter >= FrameRateNoise)

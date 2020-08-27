@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JunkPile : Building
+public class JunkPile : Storage
 {
-    public ResourceManager RM;
-
     // Start is called before the first frame update
     protected new void Start()
     {
+            
+        base.Start();
         //// Referencing the ResourceManager script
         //RM = GameObject.Find("Player").GetComponent<ResourceManager>();
         //
@@ -22,14 +22,15 @@ public class JunkPile : Building
 
     }
 
-    private void OnDestroy()
+    protected new void OnDestroy()
     {
+        base.OnDestroy();
         // Removing the junk pile container from the list
         //RM.JunkPilesContainers.Remove(gameObject);
     }
     // Update is called once per frame
     protected new void Update()
     {
-        
+        base.Update();
     }
 }

@@ -959,9 +959,12 @@ MonoBehaviour:
   isSettler: 0
   isBuilding: 0
   isResource: 0
-  isPlayer: 0
+  isPlayer: 1
   isSelected: 0
   id: 0
+  buildingBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
   RM: {fileID: 0}
 --- !u!1 &8296988178585649527
 GameObject:
