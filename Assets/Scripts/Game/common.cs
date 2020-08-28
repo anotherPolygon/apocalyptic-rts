@@ -174,10 +174,17 @@ namespace common
         }
 
 
-        // Dosent work:
+        // Dosent work: --POSSIBLE FIX: TRY VCONERT TYPE TO --> ConvertAll
         public static Entity FindClosestEntityType(GameObject lookingGameObject, List<Entity> typesList)
         {
             float minDist = Mathf.Infinity;
+
+            // change avboe lkist to List<Type>
+            //List<Type> lp = lpf.ConvertAll(new Converter<Entity, Type>(TypeToEntity));
+            // TypeToEntity is a converter functions.. which will use Type t as Entity like this:
+            // SomeClass obj2 = t as SomeClass; --> dont know how to use it
+
+
             Entity closestEntityOfType = null; // pay attention the might return null!
             Vector3 currentPosition = lookingGameObject.transform.position;
             foreach (Entity entityOfType in typesList)

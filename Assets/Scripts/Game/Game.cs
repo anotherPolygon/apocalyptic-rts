@@ -22,7 +22,9 @@ public class Game : MonoBehaviour
 
     Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
     Dictionary<Entity, int> entity2id = new Dictionary<Entity, int>(); 
-    public List<Bounds> playerBuildingBounds = new List<Bounds>();
+    //public List<Bounds> BuildingBounds = new List<Bounds>();
+    public Dictionary<string, Bounds> BuildingBoundsDict = new Dictionary<String, Bounds>();
+
 
     private void Awake()
     {

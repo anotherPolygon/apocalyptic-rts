@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 3360618114305592282}
   - component: {fileID: 7987960026591229438}
   - component: {fileID: 5541955454199339523}
+  - component: {fileID: 600458186272380255}
   m_Layer: 0
   m_Name: OverlapFeedback
   m_TagString: Untagged
@@ -172,7 +173,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7004761654072393281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.54, y: 0.43, z: 0}
+  m_LocalPosition: {x: 3.54, y: 0.1, z: 0}
   m_LocalScale: {x: 3.7930226, y: 1.07755, z: 2.222447}
   m_Children: []
   m_Father: {fileID: 708696174874965777}
@@ -223,6 +224,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &600458186272380255
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7004761654072393281}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: -0.000000059604645, y: -0.000000029802322, z: 0}
 --- !u!1001 &708696174875356563
 PrefabInstance:
   m_ObjectHideFlags: 0

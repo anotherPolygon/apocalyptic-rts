@@ -13,7 +13,12 @@ public class Events : MonoBehaviour
     {
         current = this;
     }
-
+    public event Action OnLeftClick;
+    public void LeftClick()
+    {
+        if (OnLeftClick != null)
+            OnLeftClick();
+    }
     public event Action<GameObject> OnSingleSelection;
     public void SingleSelection(GameObject target)
     {

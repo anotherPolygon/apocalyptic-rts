@@ -921,7 +921,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.831543, z: 0.9940309}
+  m_Size: {x: 2.66, y: 3.831543, z: 0.9940309}
   m_Center: {x: 4.4808435e-11, y: 1.4157715, z: 0.0029844642}
 --- !u!208 &208677416223144382
 NavMeshObstacle:
@@ -965,7 +965,7 @@ MonoBehaviour:
   buildingBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  RM: {fileID: 0}
+  isStorage: 0
 --- !u!1 &8296988178585649527
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,8 +16,14 @@ public class Building : Entity
         this.isBuilding = true;
         buildingBounds = gameObject.GetComponent<Collider>().bounds;
         //buildingBounds = gameObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].gameObject.GetComponent<Collider>().bounds;
-        Game.Manager.playerBuildingBounds.Add(buildingBounds);
+        common.objects.UnityObjects g;
+        if (this.unityObjects.childs.TryGetValue("OverlapFeedback", out g))
+            buildingBounds = this.unityObjects.childs["OverlapFeedback"].gameObject.GetComponent<Collider>().bounds;
+        Game.Manager.BuildingBoundsDict.Add("Building-"+gameObject.GetInstanceID().ToString(), buildingBounds);
+
+      
         
+
         
         // A failed try to create a plane under each building
         //GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -30,7 +36,7 @@ public class Building : Entity
     protected new void Update()
     {
         base.Update();
-        
+        //Debug.Log("Building-" + gameObject.GetInstanceID().ToString() +"-"+ buildingBounds);
     }
 
 }

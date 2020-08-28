@@ -38,31 +38,39 @@ public class BuyBuilding : MonoBehaviour
             overlappingFeedbackMaterial = currentPlaceableObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].renderer.material;
 
             int intersectionsCounter = 0;
-            foreach (Bounds b in Game.Manager.playerBuildingBounds)
+            foreach (var item in Game.Manager.BuildingBoundsDict)
             {
-                if(CheckIntersects(buildingBounds, b))
+                if(_CheckIntersects(buildingBounds, item.Value))
                 {
                     overlappingFeedbackMaterial.SetColor("_Color", Color.red);
                     intersectionsCounter += 1;
                 }
+
+            }
 
             if (intersectionsCounter==0)
             {
                 overlappingFeedbackMaterial.SetColor("_Color", Color.green);
             }
                 
-            }
         }
     }
 
     // Relaese the building from mouse
-    private void RelaeaseIfClicked()
+    private void PlaceBuilding()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            currentPlaceableObject.layer = LayerMask.NameToLayer("Default");
-            currentPlaceableObject = null;
-        }
+        Events.current.OnLeftClick -= PlaceBuilding;
+        currentPlaceableObject.layer = LayerMask.NameToLayer("Default");
+        Debug.Log("Hi");
+        Debug.Log(_GetBuildinBounds());
+        Debug.Log(Game.Manager.BuildingBoundsDict["Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString()]);
+        Game.Manager.BuildingBoundsDict.Remove("Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString());
+        Game.Manager.BuildingBoundsDict.Add("Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString(), _GetBuildinBounds());
+        currentPlaceableObject = null;
+
+        //Game.Manager.playerBuildingBounds.RemoveAt(Game.Manager.playerBuildingBounds.Count - 1);
+        //Game.Manager.playerBuildingBounds.Add(buildingBounds);
+
     }
 
     private void HandleNewBuilding()
@@ -70,7 +78,8 @@ public class BuyBuilding : MonoBehaviour
         if (currentPlaceableObject == null)
         {
             currentPlaceableObject = Instantiate(placeObjectPrefab);
-            currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast"); 
+            Events.current.OnLeftClick += PlaceBuilding;
         }
         else
         {
@@ -82,10 +91,10 @@ public class BuyBuilding : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
+        currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // a patch i added -> maybe not needed
         if (Physics.Raycast(ray, out hitInfo))
         {
             currentPlaceableObject.transform.position = new Vector3(hitInfo.point.x, hitInfo.transform.lossyScale.y, hitInfo.point.z);
-            //localScale.y / 2f
             //currentPlaceableObject.transform.position = hitInfo.point; // deags the prefab to mouse
             currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal); // verify that rotation is upwards even if its on a slope
                                                                                                                 // maybe in some objects I would want this rotation
@@ -99,9 +108,19 @@ public class BuyBuilding : MonoBehaviour
     }
 
     // A way to check for collusion with bounds of otther buildings - in process
-    bool CheckIntersects(Bounds thisBounds, Bounds otherBounds)
+    bool _CheckIntersects(Bounds thisBounds, Bounds otherBounds)
     {
         bool overlapping = otherBounds.Intersects(thisBounds);
         return overlapping;
+    }
+
+    private Bounds _GetBuildinBounds()
+    {
+        buildingBounds = currentPlaceableObject.GetComponent<Collider>().bounds;
+        common.objects.UnityObjects g;
+        if (currentPlaceableObject.GetComponent<Building>().unityObjects.childs.TryGetValue("OverlapFeedback", out g))
+            buildingBounds = currentPlaceableObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].gameObject.GetComponent<Collider>().bounds;
+
+        return buildingBounds;
     }
 }
