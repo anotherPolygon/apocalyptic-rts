@@ -39,6 +39,11 @@ public class QuaziTimer : MonoBehaviour
         //// Debug.Log(counter);
 
     }
+    public void After(string label, Action a, int frameRate, int allowedDeviation = 0)
+    {
+        bool playOnce = true;
+        RegisterTimedAction(label, a, frameRate, allowedDeviation, playOnce);
+    }
 
     public void RegisterTimedAction(string label, Action a, int frameRate, int allowedDeviation, bool playOnceAfterDelay=false)
     {

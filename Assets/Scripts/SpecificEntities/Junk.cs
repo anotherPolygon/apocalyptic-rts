@@ -9,6 +9,7 @@ public class Junk : Resource
     {
         base.Start();
         this.name = Constants.junkResourceName; // its no the name of the game object - this.gameObject.name is the name shown in the edito
+        this.tag = Constants.junkResourceName;
     }
 
     // Update is called once per frame

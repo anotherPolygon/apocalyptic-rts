@@ -39,8 +39,7 @@ public class NavMeshArrivalReporter : MonoBehaviour
         RemoveAgent(agent);
         agent2destination.Add(agent, agentDD);
         agentKeys.Add(agent);
-        Debug.Log(agent + " Added");
-        Debug.Log(agentKeys);
+        //Debug.Log(agent + " Added");
 
     }
 
@@ -51,8 +50,7 @@ public class NavMeshArrivalReporter : MonoBehaviour
         {
             agent2destination.Remove(agent);
             agentKeys.Remove(agent);
-            Debug.Log(agent + " Removed");
-            Debug.Log(agentKeys);
+            //Debug.Log(agent + " Removed");
         }
     }
 
