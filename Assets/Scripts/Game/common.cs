@@ -160,17 +160,18 @@ namespace common
         }
 
         // A method to find the center between several game objects
-        public static Vector3 FindCenterPoint(GameObject[] gos) {
+        public static Vector3 FindCenterPoint(GameObject[] gos)
+        {
             if (gos.Length == 0)
-                 return Vector3.zero;
+                return Vector3.zero;
 
             if (gos.Length == 1)
-                 return gos[0].transform.position;
+                return gos[0].transform.position;
 
             Bounds bounds = new Bounds(gos[0].transform.position, Vector3.zero);
-             for (int i = 1; i<gos.Length; i++)
-                 bounds.Encapsulate(gos[i].transform.position); 
-             return bounds.center;
+            for (int i = 1; i < gos.Length; i++)
+                bounds.Encapsulate(gos[i].transform.position);
+            return bounds.center;
         }
 
 
@@ -184,13 +185,12 @@ namespace common
             // TypeToEntity is a converter functions.. which will use Type t as Entity like this:
             // SomeClass obj2 = t as SomeClass; --> dont know how to use it
 
-
             Entity closestEntityOfType = null; // pay attention the might return null!
             Vector3 currentPosition = lookingGameObject.transform.position;
             foreach (Entity entityOfType in typesList)
             {
                 float dist = Vector3.Distance(entityOfType.gameObject.transform.position, currentPosition);
-                if (dist<minDist)
+                if (dist < minDist)
                 {
                     closestEntityOfType = entityOfType;
                     minDist = dist;
@@ -198,6 +198,16 @@ namespace common
             }
             return closestEntityOfType;
         }
+
+        public static void wnaderAround(Animated animated)
+        {
+            Vector3 refferncePoint = animated.gameObject.transform.position;
+
+            Vector3 newDestination = new Vector3(refferncePoint.x + UnityEngine.Random.Range(-animated.ProgressDistance, animated.ProgressDistance),
+                    refferncePoint.y + UnityEngine.Random.Range(-animated.ProgressDistance, animated.ProgressDistance),
+                    refferncePoint.z + UnityEngine.Random.Range(-animated.ProgressDistance, animated.ProgressDistance));
+
+            animated.unityObjects.navMeshAgent.SetDestination(newDestination);
+        }
     }
 }
-

@@ -92,10 +92,10 @@ public class Settler : Animated
     {
         base.Update();
         HandleState();
+        common.Utils.wnaderAround(this);
     }
     
     // State and Animation Handlers
-
     private void HandleState()
     {
         HandleWorkStuff();
@@ -182,7 +182,6 @@ public class Settler : Animated
     }
 
     // Resource Gathering Methods
-
     private void HandleGatheringState()
     {
         if (isGathering) // maybe change to role...
@@ -192,6 +191,7 @@ public class Settler : Animated
             //StartDroppingResource();
         }
     }
+
     private void checkIfArrivedToTargetResource()
     {
         if (this.currentGatherState == Constants.ResourceGatheringState.TowardsResource)
@@ -217,6 +217,7 @@ public class Settler : Animated
         //  }
 
     }
+
     private void StartDelivering()
     {
         this.currentGatherState = Constants.ResourceGatheringState.DeliverResource;
@@ -226,6 +227,7 @@ public class Settler : Animated
         MoveTo(assignedResourceStoragePlace.gameObject.transform.position, 3f);
         Events.current.onArivedToDestination += StartDroppingResource;
     }
+
     private void StartDroppingResource(NavMeshAgent a = null)
     {
         //if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
@@ -256,8 +258,7 @@ public class Settler : Animated
         Events.current.onArivedToDestination += StartGathering;
         Debug.Log(this.name + " started gathering " + gatheredResource + " --> delivered to " + closestStorage.name);
     }
-
-        
+     
     private void QuitGathering()
     {
         isGathering = false;
@@ -325,12 +326,7 @@ public class Settler : Animated
 
     private void HandleWorkStuff()
     {
-        //if (workPlace is null)
-        //    //Debug.Log("Not Working");
-        //    //ChangeMeshColor(originalColor);
-        //else
-        //    //Debug.Log("Working"); 
-        //    //ChangeMeshColor(workPlace.unityObjects.renderer.material.color);
+        
     }
 
     internal void StartWorking(WorkBuilding building)
@@ -338,16 +334,7 @@ public class Settler : Animated
         QuitEveryThing();
         workPlace = building;
         MoveTo(building.unityObjects.transform.position);
-        
-        //Vector3 cent = building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.center;
-        //float boundX = building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.size.x;
-        //MoveTo(cent + new Vector3(boundX,0,0));
-        //Debug.Log(building.unityObjects.childs["Cube"].gameObject.GetComponent<Renderer>().bounds.center);
-        //Debug.Log(building.unityObjects.childs["EntryPoint"].transform.position);
-        //Debug.Log(building.unityObjects.transform.position);
-        //NavMeshObstacle obstacle = building.GetComponent<NavMeshObstacle>();
     }
-
 
     private void AssignToWork(WorkBuilding building)
     {
@@ -417,7 +404,7 @@ public class Settler : Animated
 
         UnregisterFromSelectedStateEvents();
     }
-
+    
     public void HandleMultipleSelection(Bounds box)
     {
         // TODO: this is not ideal. Mouse object should identify objects in the box
