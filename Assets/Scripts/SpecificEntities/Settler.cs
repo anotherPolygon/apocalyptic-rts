@@ -45,7 +45,7 @@ public class Settler : Animated
     {
         this.isSelected = false;
         this.originalColor = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
-        this.currentSettlerState = Constants.SettlerStates.Working;  // Defining default role as a worker
+        this.currentSettlerState = Constants.SettlerStates.Idle;  // Defining default role as a worker
         this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
     }
 
@@ -93,9 +93,47 @@ public class Settler : Animated
     {
         base.Update();
         HandleState();
-        common.Utils.wnaderAround(this);
+        checkSettlerState();
+
+
     }
     
+    public void checkSettlerState()
+    {
+        if (currentSettlerState == Constants.SettlerStates.Idle)
+        {
+            Game.Manager.Timer.After(10f, SettlerWander, this.name + "-wander");
+        }
+    }
+
+    public void SettlerWander()
+    {
+        if (currentSettlerState == Constants.SettlerStates.Idle) // check if still idle
+        {
+            Vector3 newDestination = common.Utils.GetDestinationAround(this);
+            MoveTo(newDestination);
+            currentSettlerState = Constants.SettlerStates.Wandering;
+            Events.current.onArivedToDestination += ReturnToIdle;
+            Game.Manager.Timer.After(10f, SettlerWander, this.name + "-wander");
+        }
+    }
+
+    public void ReturnToIdle(NavMeshAgent a)
+    {
+        if(a == this.unityObjects.navMeshAgent)
+        {
+            Events.current.onArivedToDestination -= ReturnToIdle;
+            currentSettlerState = Constants.SettlerStates.Idle;
+        }
+    }
+    
+    public void QuitWandering()
+    {
+        Events.current.onArivedToDestination -= ReturnToIdle;
+        Game.Manager.Timer.RemoveTimedAction(this.name + "-wander");
+    }
+
+
     // State and Animation Handlers
     private void HandleState()
     {
@@ -135,6 +173,7 @@ public class Settler : Animated
         QuitCombat();
         QuitGathering();
         QuitConstracting();
+        QuitWandering();
     }
     
     // General Action 
@@ -248,6 +287,7 @@ public class Settler : Animated
     {
         QuitEveryThing();
         isGathering = true;
+        currentSettlerState = Constants.SettlerStates.Gathering;
         this.currentGatherState = Constants.ResourceGatheringState.TowardsResource;
         assignedResourceStoragePlace = closestStorage;
         targetResource = gatheredResource;
@@ -380,6 +420,8 @@ public class Settler : Animated
     {
         QuitEveryThing();
         MoveTo(point);
+        currentSettlerState = Constants.SettlerStates.Walking;
+        Events.current.onArivedToDestination += ReturnToIdle;
     }
 
     private void MoveTo(Vector3 point, float distanceFromDestination = 0)
@@ -387,6 +429,7 @@ public class Settler : Animated
         //this.unityObjects.childs[Constants.settlerMeshName].animator.SetLookAtPosition(point);
         // Line above raises an issue: "Setting and getting Body Position/Rotation, IK Goals, Lookat and BoneLocalRotation should only be done in OnAnimatorIK or OnStateIK
         //                              UnityEngine.Animator:SetLookAtPosition(Vector3)"
+        
         this.unityObjects.navMeshAgent.destination = point;
         Game.Manager.ArrivalReporter.RegisterAgent(this.unityObjects.navMeshAgent, point, distanceFromDestination);
     }

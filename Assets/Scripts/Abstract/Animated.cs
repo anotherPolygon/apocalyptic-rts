@@ -9,7 +9,7 @@ public class Animated : Unit
     protected new void Start()
     {
         base.Start();
-        ProgressDistance = 5f;
+        ProgressDistance = 8f;
     }
 
     // Update is called once per frame
