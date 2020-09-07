@@ -13,7 +13,7 @@ public class BuyBuilding : MonoBehaviour
 
     private GameObject currentPlaceableObject; // refernce to "placeObjectPrefab"
 
-    private float mouseWheelRotation;
+    private float rotationDirection;
     private float PlaceableOjectRotationSpeed = 10f;
 
     private Bounds buildingBounds;
@@ -117,9 +117,15 @@ public class BuyBuilding : MonoBehaviour
     }
     private void RotateFromMouseWheel()
     {
-        mouseWheelRotation += Input.mouseScrollDelta.y;
-        currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * PlaceableOjectRotationSpeed);
-        mouseWheelRotation = 0;
+        if (Input.GetKey(KeyCode.Q))
+            rotationDirection -= 5;
+        if (Input.GetKey(KeyCode.E))
+            rotationDirection += 5;
+        if (Input.GetKeyDown(KeyCode.R))
+            rotationDirection += 90;
+
+        currentPlaceableObject.transform.Rotate(Vector3.up, rotationDirection);
+        rotationDirection = 0;
     }
 
     // A way to check for collusion with bounds of otther buildings - in process
