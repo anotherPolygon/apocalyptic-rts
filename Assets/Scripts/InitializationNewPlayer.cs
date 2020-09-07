@@ -7,7 +7,9 @@ public class InitializationNewPlayer : MonoBehaviour
     public List<Mesh> meshes;// the fit of the Character fat || fitness || normal
     public List<Material> materials;//The Color of The Character
     public List<GameObject> Hair;
+    public List<GameObject> Beard;
     public int[] SaveDetails;
+    [SerializeField] public bool Man;//for man value true for woman value false
     SkinnedMeshRenderer skinnedMeshRenderer;
     void Start()
     {
@@ -34,10 +36,17 @@ public class InitializationNewPlayer : MonoBehaviour
         {
             for (int i = 0; i < Hair.Capacity; i++)
                 Hair[i].SetActive(false);
+            if(Man)
+                for (int i = 0; i < Beard.Capacity; i++)
+                    Beard[i].SetActive(false);
             skinnedMeshRenderer.sharedMesh = meshes[SaveDetails[0] = Random.Range(0 , meshes.Capacity)];
             skinnedMeshRenderer.material = materials[SaveDetails[1] = Random.Range(0, materials.Capacity)];
             Hair[SaveDetails[2] = Random.Range(0, Hair.Capacity)].SetActive(true);
-
+            if(Man)
+               if (Random.Range(0 , 2) == 1f)//the chance if the player will be have a beard
+                    Beard[SaveDetails[3] = Random.Range(0, Beard.Capacity)].SetActive(true);
+               else
+                    SaveDetails[3] = -1;// dont have a beard
             //add here hair change
             //add here beard change for men!..!..!
             //add here tatto
