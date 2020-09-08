@@ -9,6 +9,7 @@ public class Settler : Animated
     public GameObject healthBar;
     private Color originalColor;
     public WorkBuilding workPlace;
+    public Building constructionSite;
     public Constants.SettlerStates currentSettlerState;
     public Constants.ResourceGatheringState currentGatherState;
 
@@ -44,7 +45,7 @@ public class Settler : Animated
     {
         this.isSelected = false;
         this.originalColor = this.unityObjects.childs[Constants.settlerMeshName].renderer.material.color;
-        this.currentSettlerState = Constants.SettlerStates.Working;  // Defining default role as a worker
+        this.currentSettlerState = Constants.SettlerStates.Idle;  // Defining default role as a worker
         this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
     }
 
@@ -92,9 +93,47 @@ public class Settler : Animated
     {
         base.Update();
         HandleState();
-        common.Utils.wnaderAround(this);
+        checkSettlerState();
+
+
     }
     
+    public void checkSettlerState()
+    {
+        if (currentSettlerState == Constants.SettlerStates.Idle)
+        {
+            Game.Manager.Timer.After(10f, SettlerWander, this.name + "-wander");
+        }
+    }
+
+    public void SettlerWander()
+    {
+        if (currentSettlerState == Constants.SettlerStates.Idle) // check if still idle
+        {
+            Vector3 newDestination = common.Utils.GetDestinationAround(this);
+            MoveTo(newDestination);
+            currentSettlerState = Constants.SettlerStates.Wandering;
+            Events.current.onArivedToDestination += ReturnToIdle;
+            Game.Manager.Timer.After(10f, SettlerWander, this.name + "-wander");
+        }
+    }
+
+    public void ReturnToIdle(NavMeshAgent a)
+    {
+        if(a == this.unityObjects.navMeshAgent)
+        {
+            Events.current.onArivedToDestination -= ReturnToIdle;
+            currentSettlerState = Constants.SettlerStates.Idle;
+        }
+    }
+    
+    public void QuitWandering()
+    {
+        Events.current.onArivedToDestination -= ReturnToIdle;
+        Game.Manager.Timer.RemoveTimedAction(this.name + "-wander");
+    }
+
+
     // State and Animation Handlers
     private void HandleState()
     {
@@ -133,6 +172,8 @@ public class Settler : Animated
         QuitWork();
         QuitCombat();
         QuitGathering();
+        QuitConstracting();
+        QuitWandering();
     }
     
     // General Action 
@@ -204,18 +245,17 @@ public class Settler : Animated
 
     private void StartGathering(NavMeshAgent a = null)
     {
-        //if (this.currentGatherState == Constants.ResourceGatheringState.CollectResource)
-       // {
+        if (a == this.unityObjects.navMeshAgent)
+        {
+            Events.current.onArivedToDestination -= StartGathering;
             this.unityObjects.navMeshAgent.SetDestination(transform.position); // in order to stop the setller! 
                                                                                // pay attentions to navmesh sticking to the place set at destination.
             this.currentGatherState = Constants.ResourceGatheringState.CollectResource;
             isCollectingJunk = true;
             bool isOneTimeAction = true;
-            Game.Manager.Timer.RegisterTimedAction(this.name + "Deliver Junk", StartDelivering, 100, 10, isOneTimeAction);
+            Game.Manager.QuaziTimer.RegisterTimedAction(this.name + "Deliver Junk", StartDelivering, 100, 10, isOneTimeAction);
             this.currentGatherState = Constants.ResourceGatheringState.WaitForColloecrion;
-            Events.current.onArivedToDestination -= StartGathering;
-        //  }
-
+        }
     }
 
     private void StartDelivering()
@@ -230,27 +270,24 @@ public class Settler : Animated
 
     private void StartDroppingResource(NavMeshAgent a = null)
     {
-        //if (this.currentGatherState == Constants.ResourceGatheringState.DeliverResource)
-        //{
-        //    float distToTargetStorage = Vector3.Distance(transform.position, assignedResourceStoragePlace.transform.position);
-        //    if (3f >= distToTargetStorage)
-        //    {
-                this.currentGatherState = Constants.ResourceGatheringState.DeliverResource;
-                this.unityObjects.navMeshAgent.SetDestination(transform.position); // pay attention - mabe other other method
-                isDeliveringJunk = false;
-                junkPiece.SetActive(false);
-                Events.current.GatheredResource(targetResource);
-                InitiateGatheringProcess(targetResource, assignedResourceStoragePlace);
-                Events.current.onArivedToDestination -= StartDroppingResource;
-
-        //    }
-        //}
+        if(a==this.unityObjects.navMeshAgent)
+        {
+            Events.current.onArivedToDestination -= StartDroppingResource;
+            this.currentGatherState = Constants.ResourceGatheringState.DeliverResource;
+            this.unityObjects.navMeshAgent.SetDestination(transform.position); // pay attention - mabe other other method
+            isDeliveringJunk = false;
+            junkPiece.SetActive(false);
+            Debug.Log('a');
+            Events.current.GatheredResource(targetResource.tag);
+            InitiateGatheringProcess(targetResource, assignedResourceStoragePlace);
+        }
     }
 
     internal void InitiateGatheringProcess(Resource gatheredResource, Storage closestStorage)
     {
         QuitEveryThing();
         isGathering = true;
+        currentSettlerState = Constants.SettlerStates.Gathering;
         this.currentGatherState = Constants.ResourceGatheringState.TowardsResource;
         assignedResourceStoragePlace = closestStorage;
         targetResource = gatheredResource;
@@ -261,11 +298,11 @@ public class Settler : Animated
      
     private void QuitGathering()
     {
+        Events.current.onArivedToDestination -= StartGathering;
+        Events.current.onArivedToDestination -= StartDroppingResource;
         isGathering = false;
         this.currentGatherState = Constants.ResourceGatheringState.NotGathering;
         this.currentSettlerState = Constants.SettlerStates.Idle;
-        Events.current.onArivedToDestination -= StartGathering;
-        Events.current.onArivedToDestination -= StartDroppingResource;
         junkPiece.SetActive(false);
 
         targetResource = null;
@@ -299,12 +336,12 @@ public class Settler : Animated
         this.targetOfAttack = otherEntityUnderAttck;
         this.isInCombat = true;
         this.isShooting = true;
-        Game.Manager.Timer.RegisterTimedAction(this.name + "Attack", Attack, 45, 20);
+        Game.Manager.QuaziTimer.RegisterTimedAction(this.name + "Attack", Attack, 45, 20);
     }
 
     internal void QuitCombat()
     {
-        Game.Manager.Timer.RemoveTimedAction(this.name + "Attack"); // Needs to be fixxed
+        Game.Manager.QuaziTimer.RemoveTimedAction(this.name + "Attack"); // Needs to be fixxed
         this.isInCombat = false;
         this.isShooting = false;
         if(this.targetOfAttack != null)
@@ -341,11 +378,50 @@ public class Settler : Animated
         ChangeMeshColor(building.unityObjects.renderer.material.color);
     }
 
+    // Construction methods
+    public void StartConstruction(Building building)
+    {
+        constructionSite = building;
+        MoveTo(constructionSite.transform.position);
+        Events.current.onArivedToDestination += OnArrivedAtConstructionSite;
+    }
+
+    private void OnArrivedAtConstructionSite(NavMeshAgent a)
+    {
+        if (a == this.unityObjects.navMeshAgent)
+        {
+            Events.current.onArivedToDestination -= OnArrivedAtConstructionSite;
+            ConstructBuilding();
+        }
+    }
+
+    private void ConstructBuilding()
+    {
+        if(constructionSite.constructionProgress <= 100)
+        {
+            constructionSite.constructionProgress += 15;
+            Game.Manager.Timer.After(2f, ConstructBuilding, this.name + "-Construct");
+            //Game.Manager.Timer.RegisterTimedAction(this.name + "-Construct", ConstructBuilding, 2f, 0f, true);
+        }
+        else
+        {
+            QuitEveryThing();
+            constructionSite.ConstructionFinished();
+        }
+    }
+    private void QuitConstracting()
+    {
+        Events.current.onArivedToDestination -= OnArrivedAtConstructionSite;
+        Game.Manager.Timer.RemoveTimedAction(this.name + "-Construct");
+    }
+
     // Move Methods
     private void HandleMoveCommand(Vector3 point)
     {
         QuitEveryThing();
         MoveTo(point);
+        currentSettlerState = Constants.SettlerStates.Walking;
+        Events.current.onArivedToDestination += ReturnToIdle;
     }
 
     private void MoveTo(Vector3 point, float distanceFromDestination = 0)
@@ -353,6 +429,7 @@ public class Settler : Animated
         //this.unityObjects.childs[Constants.settlerMeshName].animator.SetLookAtPosition(point);
         // Line above raises an issue: "Setting and getting Body Position/Rotation, IK Goals, Lookat and BoneLocalRotation should only be done in OnAnimatorIK or OnStateIK
         //                              UnityEngine.Animator:SetLookAtPosition(Vector3)"
+        
         this.unityObjects.navMeshAgent.destination = point;
         Game.Manager.ArrivalReporter.RegisterAgent(this.unityObjects.navMeshAgent, point, distanceFromDestination);
     }

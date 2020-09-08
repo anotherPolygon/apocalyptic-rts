@@ -13,8 +13,7 @@ public class Storage : Building
 
         // Registrating this storage is a place that hold the resource of this tag
         // builds on the tags of storgae and resource to have the same name
-        Debug.Log("Added this tag-> " + this.tag);
-        Debug.Log(Game.Manager.RM);
+        //Debug.Log("Added this tag-> " + this.tag);
         if (!Game.Manager.RM.tag2Storage.TryGetValue(tag, value: out List<Storage> storagePlaces))
         {
             Game.Manager.RM.tag2Storage.Add(this.tag, storagePlaces = new List<Storage>());

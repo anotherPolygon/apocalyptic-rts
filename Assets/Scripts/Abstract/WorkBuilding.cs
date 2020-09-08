@@ -19,9 +19,16 @@ public class WorkBuilding : Building
 
     override internal void InteractWithSettler(Settler settler)
     {
-        workers.Add(settler.id, settler);
-        settler.StartWorking(this);
-        PrintDictionaryOnChange(workers);
+        if (this.isInConstruction)
+        {
+            base.InteractWithSettler(settler);
+        }
+        else
+        {
+            workers.Add(settler.id, settler);
+            settler.StartWorking(this);
+            PrintDictionaryOnChange(workers);
+        }
     }
 
     internal void FireWorker(Settler settler)
@@ -32,7 +39,7 @@ public class WorkBuilding : Building
 
     internal void PrintDictionaryOnChange(Dictionary<int, Settler> dict)
     {
-        string mess = "Workers in" + this.name;
+        string mess = "Workers in " + this.name;
         foreach (var item in dict)
         {
             mess = mess + " " + item.Key;

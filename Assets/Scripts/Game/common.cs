@@ -199,7 +199,7 @@ namespace common
             return closestEntityOfType;
         }
 
-        public static void wnaderAround(Animated animated)
+        public static Vector3 GetDestinationAround(Animated animated)
         {
             Vector3 refferncePoint = animated.gameObject.transform.position;
 
@@ -207,7 +207,7 @@ namespace common
                     refferncePoint.y + UnityEngine.Random.Range(-animated.ProgressDistance, animated.ProgressDistance),
                     refferncePoint.z + UnityEngine.Random.Range(-animated.ProgressDistance, animated.ProgressDistance));
 
-            animated.unityObjects.navMeshAgent.SetDestination(newDestination);
+            return newDestination;
         }
     }
 }
