@@ -2049,8 +2049,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5dc64b9b30ed346b9fdbe1cc83b6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshes: []
-  materials: []
+  meshes:
+  - {fileID: 4300000, guid: 93f57cc71fccfe240aa49944673282f2, type: 2}
+  materials:
+  - {fileID: 2100000, guid: 6c64e997029b8a34cae4bb4a618bec53, type: 2}
+  - {fileID: 2100000, guid: 1754ed2cd9a6a574a8d0401b49f4e799, type: 2}
+  - {fileID: 2100000, guid: 44ee208545237c040b9517637a474981, type: 2}
+  - {fileID: 2100000, guid: 27ea9df5956bcc24f9db163be51b820f, type: 2}
+  - {fileID: 2100000, guid: c6c89153455fc9b42a9eab38d387ea70, type: 2}
   Hair:
   - {fileID: 8285151921809954237}
   - {fileID: 236653413}
@@ -2068,7 +2074,9 @@ MonoBehaviour:
   - {fileID: 1566486774}
   - {fileID: 1448657988}
   - {fileID: 980657088}
+  Beard: []
   SaveDetails: 
+  Man: 0
 --- !u!1 &8285151921809954247
 GameObject:
   m_ObjectHideFlags: 0

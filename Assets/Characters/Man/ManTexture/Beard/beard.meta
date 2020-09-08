@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Characters/Man/ManTexture/Beard/beard.meta
 guid: 4747d93f6e1cf2849bc23ab6bb5997e1
+=======
+guid: 954d3a665a9f32845a64592538497797
+>>>>>>> Stashed changes:Assets/Characters/Woman/WomanTexture/Hair/Hair 4.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
