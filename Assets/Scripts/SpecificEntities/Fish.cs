@@ -46,9 +46,7 @@ public class Fish : Animals
     private Vector3 RandomNewPlaceByProgressDistance()
     {
 
-        return new Vector3(transform.position.x + Random.Range(-ProgressDistance, ProgressDistance), 
-                        transform.position.y + Random.Range(-ProgressDistance, ProgressDistance), 
-                        transform.position.z + Random.Range(-ProgressDistance, ProgressDistance));
+        return new Vector3(transform.position.x + Random.Range(-ProgressDistance, ProgressDistance), transform.position.y + Random.Range(-ProgressDistance, ProgressDistance), transform.position.z + Random.Range(-ProgressDistance, ProgressDistance));
     }
     /// <summary>
     /// 
