@@ -19,14 +19,6 @@ public class Events : MonoBehaviour
         if (OnLeftClick != null)
             OnLeftClick();
     }
-
-    public event Action OnRightClick;
-    public void RightClick()
-    {
-        if (OnRightClick != null)
-            OnRightClick();
-    }
- 
     public event Action<GameObject> OnSingleSelection;
     public void SingleSelection(GameObject target)
     {
@@ -52,12 +44,12 @@ public class Events : MonoBehaviour
         }
     }
 
-    public event Action<string> onGatheredResource;
-    public void GatheredResource(string resourceName)
+    public event Action<Resource> onGatheredResource;
+    public void GatheredResource(Resource resource)
     {
         if (onGatheredResource != null)
         {
-            onGatheredResource(resourceName);
+            onGatheredResource(resource);
         }
     }
 

@@ -1,21 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!54 &8222748570696155845
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 708696174875257649}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!65 &7632701607949822438
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71,9 +55,6 @@ MonoBehaviour:
   buildingBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  isInConstruction: 0
-  constructionProgress: 100
-  canBeConstructed: 1
 --- !u!1 &5204722332231870573
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +174,7 @@ Transform:
   m_GameObject: {fileID: 7004761654072393281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.54, y: 0.1, z: 0}
-  m_LocalScale: {x: 3.7930226, y: 1.07755, z: 1.87}
+  m_LocalScale: {x: 3.7930226, y: 1.07755, z: 2.222447}
   m_Children: []
   m_Father: {fileID: 708696174874965777}
   m_RootOrder: 4
@@ -254,8 +235,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10.01, y: 3.33, z: 10.28}
-  m_Center: {x: -0.000000059604645, y: 1.12, z: 0}
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: -0.000000059604645, y: -0.000000029802322, z: 0}
 --- !u!1001 &708696174875356563
 PrefabInstance:
   m_ObjectHideFlags: 0

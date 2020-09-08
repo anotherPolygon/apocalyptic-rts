@@ -30,11 +30,9 @@ public class Constants
     public enum SettlerStates
     {
         Idle,
-        Wandering,
         InCombat,
         Working,
         Gathering,
-        Walking,
     };
 
     public enum ResourceGatheringState

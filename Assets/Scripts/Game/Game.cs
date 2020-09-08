@@ -13,8 +13,7 @@ public class Game : MonoBehaviour
     public CameraController CameraController;
     public Mouse Mouse;
     public State State;
-    public QuaziTimer QuaziTimer;
-    public Timer Timer;
+    public QuaziTimer Timer;
     public NavMeshArrivalReporter ArrivalReporter;
     public ResourceManager RM;
     public UIManager uIManager;
@@ -44,8 +43,7 @@ public class Game : MonoBehaviour
         Mouse = GetComponent<Mouse>();
         CameraController = GetComponent<CameraController>();
         State = GetComponent<State>();
-        QuaziTimer = GetComponent<QuaziTimer>();
-        Timer = GetComponent<Timer>();
+        Timer = GetComponent<QuaziTimer>();
         ArrivalReporter = GetComponent<NavMeshArrivalReporter>();
         RM = GetComponent<ResourceManager>();
         uIManager = GetComponent<UIManager>();

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Resource : Entity
 {
+    public ResourceManager RM;
     private List<Storage> storagePlaces;
 
     // Start is called before the first frame update
@@ -47,9 +48,7 @@ public class Resource : Entity
             }
         }
 
-        //Entity x = common.Utils.FindClosestEntityType(gameObject, storagePlaces);
-        //x = x as Storage;
-
+        //common.Utils.FindClosestEntityType(gameObject, storagePlaces);
        // adress if player requsted and if  storage owned by player --> probably iside the if
 
         return closestStorge;

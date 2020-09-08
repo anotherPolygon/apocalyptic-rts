@@ -166,7 +166,6 @@ public class Mouse : MonoBehaviour
 
     private void RightClick()
     {
-        Events.current.RightClick(); // General left click event
         RaycastHit _hit;
         SendRaycast(out _hit);
 

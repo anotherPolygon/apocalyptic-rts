@@ -2,44 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AI;
-using TMPro;
 
 public class BuyBuilding : MonoBehaviour
 {
     private Button buttonTry;
 
-    public GameObject placeObjectPrefab; // added from the editor - the building to place
+    [SerializeField]
+    private GameObject placeObjectPrefab; // added from the editor - the building to place
 
     private GameObject currentPlaceableObject; // refernce to "placeObjectPrefab"
 
-    private float rotationDirection;
+    private float mouseWheelRotation;
     private float PlaceableOjectRotationSpeed = 10f;
 
     private Bounds buildingBounds;
     private Material overlappingFeedbackMaterial;
-    private Building buildingToBuy;
 
-    public int price;
-    public string resouceToCharge;
     // Start is called before the first frame update
     void Start()
     {
         buttonTry = GetComponent<Button>();
         buttonTry.onClick.AddListener(HandleNewBuilding);
-        GetComponentInChildren<TextMeshProUGUI>().text = price.ToString();
-    }
-
-    private void AddEventListeners()
-    {
-        Events.current.OnLeftClick += PlaceBuilding;
-        Events.current.OnRightClick += CancelBuyBuilding;
-    }
-
-    private void RemoveEventListeners()
-    {
-        Events.current.OnLeftClick -= PlaceBuilding;
-        Events.current.OnRightClick -= CancelBuyBuilding;
     }
 
     // Update is called once per frame
@@ -50,40 +33,44 @@ public class BuyBuilding : MonoBehaviour
         {
             MoveCurrentPlaceableObjectToMouse();
             RotateFromMouseWheel();
-            _provideFeedback();
+
+            buildingBounds = currentPlaceableObject.GetComponent<Collider>().bounds;
+            overlappingFeedbackMaterial = currentPlaceableObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].renderer.material;
+
+            int intersectionsCounter = 0;
+            foreach (var item in Game.Manager.BuildingBoundsDict)
+            {
+                if(_CheckIntersects(buildingBounds, item.Value))
+                {
+                    overlappingFeedbackMaterial.SetColor("_Color", Color.red);
+                    intersectionsCounter += 1;
+                }
+
+            }
+
+            if (intersectionsCounter==0)
+            {
+                overlappingFeedbackMaterial.SetColor("_Color", Color.green);
+            }
+                
         }
-    }
-
-    private void _provideFeedback()
-    {
-        //buildingBounds = currentPlaceableObject.GetComponent<Collider>().bounds;
-        overlappingFeedbackMaterial = currentPlaceableObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].renderer.material;
-
-        if (buildingToBuy.canBeConstructed)
-            overlappingFeedbackMaterial.SetColor("_Color", new Color(0, 183, 43, 0.25f));
-        else
-        {
-            overlappingFeedbackMaterial.SetColor("_Color", Color.red);
-        }
-    }
-
-    private void CancelBuyBuilding()
-    {
-        RemoveEventListeners();
-        Game.Manager.BuildingBoundsDict.Remove("Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString());
-        Destroy(currentPlaceableObject);
     }
 
     // Relaese the building from mouse
     private void PlaceBuilding()
     {
-        if(Game.Manager.RM.verifAndApplyCost(price, resouceToCharge))
-        {
-            RemoveEventListeners();
-            currentPlaceableObject.layer = LayerMask.NameToLayer("Default");
-            currentPlaceableObject.GetComponent<Building>().InitializeConstructionState();
-            currentPlaceableObject = null;
-        }
+        Events.current.OnLeftClick -= PlaceBuilding;
+        currentPlaceableObject.layer = LayerMask.NameToLayer("Default");
+        Debug.Log("Hi");
+        Debug.Log(_GetBuildinBounds());
+        Debug.Log(Game.Manager.BuildingBoundsDict["Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString()]);
+        Game.Manager.BuildingBoundsDict.Remove("Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString());
+        Game.Manager.BuildingBoundsDict.Add("Building-" + currentPlaceableObject.gameObject.GetInstanceID().ToString(), _GetBuildinBounds());
+        currentPlaceableObject = null;
+
+        //Game.Manager.playerBuildingBounds.RemoveAt(Game.Manager.playerBuildingBounds.Count - 1);
+        //Game.Manager.playerBuildingBounds.Add(buildingBounds);
+
     }
 
     private void HandleNewBuilding()
@@ -91,11 +78,8 @@ public class BuyBuilding : MonoBehaviour
         if (currentPlaceableObject == null)
         {
             currentPlaceableObject = Instantiate(placeObjectPrefab);
-            currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            buildingToBuy = currentPlaceableObject.GetComponent<Building>();
-            currentPlaceableObject.GetComponent<NavMeshObstacle>().enabled = false; // disabeling navmes obstacel
-            AddEventListeners();
-
+            currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast"); 
+            Events.current.OnLeftClick += PlaceBuilding;
         }
         else
         {
@@ -107,34 +91,36 @@ public class BuyBuilding : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
+        currentPlaceableObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // a patch i added -> maybe not needed
         if (Physics.Raycast(ray, out hitInfo))
         {
             currentPlaceableObject.transform.position = new Vector3(hitInfo.point.x, hitInfo.transform.lossyScale.y, hitInfo.point.z);
             //currentPlaceableObject.transform.position = hitInfo.point; // deags the prefab to mouse
-            //currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal); // verify that rotation is upwards even if its on a slope
+            currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal); // verify that rotation is upwards even if its on a slope
                                                                                                                 // maybe in some objects I would want this rotation
         }
     }
     private void RotateFromMouseWheel()
     {
-        if (Input.GetKey(KeyCode.Q))
-            rotationDirection -= 5;
-        if (Input.GetKey(KeyCode.E))
-            rotationDirection += 5;
-        if (Input.GetKeyDown(KeyCode.R))
-            rotationDirection += 90;
+        mouseWheelRotation += Input.mouseScrollDelta.y;
+        currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * PlaceableOjectRotationSpeed);
 
-        currentPlaceableObject.transform.Rotate(Vector3.up, rotationDirection);
-        rotationDirection = 0;
     }
 
     // A way to check for collusion with bounds of otther buildings - in process
     bool _CheckIntersects(Bounds thisBounds, Bounds otherBounds)
     {
-        bool overlapping = thisBounds.Intersects(otherBounds);
+        bool overlapping = otherBounds.Intersects(thisBounds);
         return overlapping;
-
     }
 
-    
+    private Bounds _GetBuildinBounds()
+    {
+        buildingBounds = currentPlaceableObject.GetComponent<Collider>().bounds;
+        common.objects.UnityObjects g;
+        if (currentPlaceableObject.GetComponent<Building>().unityObjects.childs.TryGetValue("OverlapFeedback", out g))
+            buildingBounds = currentPlaceableObject.GetComponent<Building>().unityObjects.childs["OverlapFeedback"].gameObject.GetComponent<Collider>().bounds;
+
+        return buildingBounds;
+    }
 }
